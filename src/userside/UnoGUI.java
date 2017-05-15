@@ -32,6 +32,7 @@ import javafx.stage.Stage;
 public class UnoGUI extends Application {
 
 	private LinkedList<User> users = new LinkedList<User>();
+	private User user;
 	private Button unob;
 	private TextArea ta;
 	private TextField tf;
@@ -40,6 +41,9 @@ public class UnoGUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+
+		// Ask for the user name
+		String name = (String) JOptionPane.showInputDialog(null, "What is your name?", JOptionPane.PLAIN_MESSAGE);
 
 		Socket playerSocket = null;
 		// Try connecting to the server
@@ -50,25 +54,20 @@ public class UnoGUI extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		// Sets up the monitors that govern writing to and reading from the
-		// server
-		this.pom = new PlayerOutputMonitor(playerSocket);
-		this.pim = new PlayerInputMonitor(playerSocket, this);
 
-		String s = (String)JOptionPane.showInputDialog(
-                null,
-                "What is your name?",
-                JOptionPane.PLAIN_MESSAGE);
-		// Ask the user for their name
-		String name = "Martin";
-
-		// L�gg till sj�lva anv�ndaren
+		// Lägg till själva användaren
 		users.add(new User(name));
 
 		GameBoard gb = new GameBoard(users);
 		User user = gb.getUser(0);
 		gb.setupGame();
+		// Sets up the monitors that govern writing to and reading from the
+		// server
+		this.pom = new PlayerOutputMonitor(playerSocket);
+		this.pim = new PlayerInputMonitor(playerSocket, this);
+
+		pom.addToMailbox("N " + name);
+
 		// String currentPlayer = gb.getActiveUser().getName(); //Kan endast
 		// spela om deta är "rätt"
 
@@ -232,20 +231,20 @@ public class UnoGUI extends Application {
 
 		// Skriver ut meddelandet fr�n textfield i textarea n�r Enter trycks
 		// ner, inget h�nder om textfield �r tomt
-//		tf.setOnKeyPressed(new EventHandler<KeyEvent>() {
-//			@Override
-//			public void handle(KeyEvent event) {
-//				if (event.getCode() == KeyCode.ENTER && !tf.getText().equals("")) {
-//					ta.appendText(user.getName() + ": " + tf.getText() + '\n');
-//					tf.setText("");
-//				}
-//			}
-//		});
-		
+		// tf.setOnKeyPressed(new EventHandler<KeyEvent>() {
+		// @Override
+		// public void handle(KeyEvent event) {
+		// if (event.getCode() == KeyCode.ENTER && !tf.getText().equals("")) {
+		// ta.appendText(user.getName() + ": " + tf.getText() + '\n');
+		// tf.setText("");
+		// }
+		// }
+		// });
+
 		tf.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				if(event.getCode() == KeyCode.ENTER && !tf.getText().equals("")){
+				if (event.getCode() == KeyCode.ENTER && !tf.getText().equals("")) {
 					String message = tf.getText();
 					pom.addToMailbox("C " + message);
 					tf.setText("");
@@ -253,19 +252,19 @@ public class UnoGUI extends Application {
 			}
 		});
 
-//		unob.setOnAction(new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent e) {
-//				if (user.sayUno()) {
-//					// Meddela övriga spelare att den här spelare har uno
-//					ta.appendText("You said UNO! \n");
-//				} else {
-//					ta.appendText("You do not have UNO! \n");
-//				}
-//
-//			}
-//		});
-		
+		// unob.setOnAction(new EventHandler<ActionEvent>() {
+		// @Override
+		// public void handle(ActionEvent e) {
+		// if (user.sayUno()) {
+		// // Meddela övriga spelare att den här spelare har uno
+		// ta.appendText("You said UNO! \n");
+		// } else {
+		// ta.appendText("You do not have UNO! \n");
+		// }
+		//
+		// }
+		// });
+
 		unob.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
