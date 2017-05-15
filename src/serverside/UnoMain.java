@@ -12,12 +12,12 @@ import serverside.UNOserver;
 public class UnoMain {
 
 	private static int PORT = 30000;
-	private static int NumberOfPlayers = 0;
+	private static int numberPlayers = 0;
 
 	public static void main(String[] args) {
 
 		boolean runGame = false;
-
+		
 		UNOserver us = null;
 		MailboxMonitor mailMonitor = new MailboxMonitor();
 
@@ -33,23 +33,22 @@ public class UnoMain {
 
 		// The accept loop
 		while (!runGame) {
+			Socket playerSocket = null;
 			try {
-				Socket playerSocket = us.accept();
+				playerSocket = us.accept();
 				mailMonitor.addPlayer(playerSocket);
-				NumberOfPlayers++;
-				while (NumberOfPlayers < num) {
-				mailMonitor.addToOutMailbox("PX R");
-					if (mailMonitor.runGame()) {
-						runGame = true;
-						break;
-					}
-				}
+				numberPlayers++;
+				if (numberPlayers == num)
+					runGame =true;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-
-		// game loop
-		System.out.println("Game started!");
+		
+		mailMonitor.addToOutMailbox("A R");
+		// The game loop
+		while (runGame){
+			
+		}
 	}
 }

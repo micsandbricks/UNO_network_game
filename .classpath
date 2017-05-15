@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/h/d2/b/mte13mgi/EDAN095/UNO_network_game/src/jfxrt.jar"/>
+	<classpathentry kind="lib" path="src/jfxrt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

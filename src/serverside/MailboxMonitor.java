@@ -104,13 +104,4 @@ public class MailboxMonitor {
 		}
 		notifyAll();
 	}
-
-	public boolean runGame() {
-		return this.runGame;
-	}
-
-	public void runGameTrue() {
-		this.runGame = true;
-		
-	}
 }

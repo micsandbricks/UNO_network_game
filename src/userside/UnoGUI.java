@@ -32,29 +32,21 @@ import javafx.stage.Stage;
 public class UnoGUI extends Application {
 
 	private LinkedList<User> users = new LinkedList<User>();
-	private User user;
 	private Button unob;
 	private TextArea ta;
 	private TextField tf;
 	private PlayerOutputMonitor pom;
 	private PlayerInputMonitor pim;
-	private boolean isLast = false;
+	private Stage primaryStage;
+	private boolean runGame = false;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
+		this.primaryStage = primaryStage;
+
 		// Ask for the user name
 		String name = (String) JOptionPane.showInputDialog(null, "What is your name?", JOptionPane.PLAIN_MESSAGE);
-
-		Socket playerSocket = null;
-		// Try connecting to the server
-		try {
-			playerSocket = new Socket("localhost", 30000);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 		// Lägg till själva användaren
 		users.add(new User(name));
@@ -62,13 +54,6 @@ public class UnoGUI extends Application {
 		GameBoard gb = new GameBoard(users);
 		User user = gb.getUser(0);
 		gb.setupGame();
-		// Sets up the monitors that govern writing to and reading from the
-		// server
-		this.pom = new PlayerOutputMonitor(playerSocket);
-		this.pim = new PlayerInputMonitor(playerSocket, this);
-
-		pom.addToMailbox("N " + name);
-
 		// String currentPlayer = gb.getActiveUser().getName(); //Kan endast
 		// spela om deta är "rätt"
 
@@ -361,21 +346,42 @@ public class UnoGUI extends Application {
 
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
-		primaryStage.show();
-		
-		if (this.isLast) 
-			pom.addToMailbox("S");
-	}
 
-	private void addUser(String userName) {
-		this.users.add(new User(userName));
+		Socket playerSocket = null;
+		// Try connecting to the server
+		try {
+			playerSocket = new Socket("localhost", 30000);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// Sets up the monitors that govern writing to and reading from the
+		// server
+		this.pom = new PlayerOutputMonitor(playerSocket);
+		this.pim = new PlayerInputMonitor(playerSocket, this);
+
+		pom.addToMailbox("N " + name);
+
+		while (!runGame) {
+			System.out.println(runGame);
+		}
+		System.out.println(runGame);
+		primaryStage.show();
+
 	}
 
 	public void update() {
 		String message = pim.readFromMailbox();
-		if (message.substring(0, 1) == "R")
-			this.isLast = true;
-		this.ta.appendText(message + '\n');
+		switch (message.substring(0, 1)) {
+		case ("R"):
+			runGame = true;
+			break;
+		default:
+			this.ta.appendText(message + '\n');
+			break;
+		}
 	}
 
 }
