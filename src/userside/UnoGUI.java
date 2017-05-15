@@ -38,6 +38,7 @@ public class UnoGUI extends Application {
 	private TextField tf;
 	private PlayerOutputMonitor pom;
 	private PlayerInputMonitor pim;
+	private boolean isLast = false;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -361,6 +362,9 @@ public class UnoGUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.show();
+		
+		if (this.isLast) 
+			pom.addToMailbox("S");
 	}
 
 	private void addUser(String userName) {
@@ -369,6 +373,8 @@ public class UnoGUI extends Application {
 
 	public void update() {
 		String message = pim.readFromMailbox();
+		if (message.substring(0, 1) == "R")
+			this.isLast = true;
 		this.ta.appendText(message + '\n');
 	}
 

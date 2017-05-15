@@ -35,6 +35,9 @@ public class GameState extends Thread {
 				users.add(new User(message.substring(2)));
 				System.out.println((users.toString()));
 				break;
+			case ("S"):
+				mm.runGameTrue();
+				break;
 			default:
 				break;
 			}
