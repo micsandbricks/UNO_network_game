@@ -1,0 +1,9 @@
+/* Toggle button style, korten p� handen. */
+.toggle-button {
+	-fx-background-color: transparent;
+}
+
+.toggle-button:selected {
+	/* Presentera valt kort */
+	-fx-effect: innershadow(gaussian,limegreen,3,7,0,0);
+}

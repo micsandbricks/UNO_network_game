@@ -1,0 +1,17 @@
+Tänker att varje meddelande avslutas med '\n' (dvs ny rad)
+
+valbara färger: r = red, b = blått, g = grönt, y = yellow, s = svart
+valbara siffor: 00-14 (13 och 14 finns endast i färg s, och är de enda med den färgen)
+
+Till och från GUI och GameBoard
+D:002 (Draw) Spelare 0 vill dra 2 nya kort (första siffran 0 sedan antal kort tvåsiffrigt)
+R:r00 (Receive) Få nytt kort (här röd 0)
+L: (LastPlayed) Vilket är det senast lagda kortet
+L:r00 Det senast lagda kortet (här röd 0)
+C: (Current) Vem är nuvarande spelare
+C:0 Det är spelare 0s tur
+P:1r00 (Play) det är spelare 1s tur och röd 0 är det senast lagda kortet
+U:0 (Uno) Spelare noll har uno, och har sagt så
+C:r (Colour) Sätt färg till rött (skall ske när någon lagt ett svart kort)
+
+E: (End) sista meddelandet, skicka vidare (behövs detta?)

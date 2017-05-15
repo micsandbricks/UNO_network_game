@@ -1,0 +1,31 @@
+#r{
+	-fx-background-color:red
+}
+
+#b{
+	-fx-background-color:blue
+}
+
+#y{
+	-fx-background-color:yellow
+}
+
+#g{
+	-fx-background-color:green
+}
+
+#play{
+	-fx-background-color: transparent;
+}
+
+#draw{
+	-fx-background-color: transparent;
+}
+
+#uno{
+	-fx-background-color: transparent;
+}
+
+.button:pressed{
+	-fx-effect: innershadow(gaussian,grey,3,7,0,0);
+}

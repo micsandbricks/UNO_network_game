@@ -1,0 +1,9 @@
+/* Style of the "background" */
+.root{
+	-fx-background-image: url("/pictures/backg.jpg");
+	-fx-background-size: cover;
+}
+
+/* Style for the circles  */
+
+
