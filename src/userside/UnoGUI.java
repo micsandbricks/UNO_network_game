@@ -425,7 +425,6 @@ public class UnoGUI extends Application {
 			break;
 		case ("T"):
 			this.ta.appendText("It is turn for " + message.substring(2, 4) + '\n');
-			// System.out.println("Reached GUI message: " + message);
 			break;
 		default:
 			break;

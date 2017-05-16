@@ -45,7 +45,16 @@ public class UnoMain {
 			}
 		}
 
+		while(!mailMonitor.allPlayersAdded(num)){
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		mailMonitor.addToOutMailbox("A R");
+		
+		
 		while (!mailMonitor.gameStateRunning()) {
 			mailMonitor.addToInMailbox("   S" + num);
 			try {

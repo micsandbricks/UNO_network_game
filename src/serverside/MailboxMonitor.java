@@ -106,4 +106,8 @@ public class MailboxMonitor {
 	public boolean gameStateRunning() {
 		return gs.running();
 	}
+
+	public boolean allPlayersAdded(int requestedNumberPlayers) {
+		return gs.allPlayersAdded(requestedNumberPlayers);
+	}
 }

@@ -52,8 +52,8 @@ public class GameState extends Thread {
 			break;
 			case ("N"):
 				users.add(new User(message.substring(2)));
-			System.out.println((users.toString()));
-			break;
+				System.out.println((users.toString()));
+				break;
 			case ("S"):
 				int numberPlayers = Integer.parseInt(message.substring(4,5));
 			if(users.size() == numberPlayers){
@@ -61,6 +61,7 @@ public class GameState extends Thread {
 				serverGameBoard.setupGame();
 				running = true;
 			}
+				break;
 			default:
 				break;
 			}
@@ -69,5 +70,9 @@ public class GameState extends Thread {
 	
 	public boolean running(){
 		return running;
+	}
+
+	public boolean allPlayersAdded(int requestedNumberPlayers) {
+		return users.size() == requestedNumberPlayers;
 	}
 }
