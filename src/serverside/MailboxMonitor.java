@@ -43,12 +43,8 @@ public class MailboxMonitor {
 	 */
 	public synchronized String fetchMessageFromInMailbox() {
 		String message = "";
-		while (in_mailbox.isEmpty()) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		if (in_mailbox.isEmpty()) {
+			return message;
 		}
 		message = this.in_mailbox.remove();
 		notifyAll();

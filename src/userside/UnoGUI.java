@@ -41,6 +41,7 @@ public class UnoGUI extends Application {
 	private boolean runGame = false;
 	private Card lastPlayed = new Card('r', 00);
 	private Button playb;
+	private User user;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -51,10 +52,11 @@ public class UnoGUI extends Application {
 		String name = (String) JOptionPane.showInputDialog(null, "What is your name?", JOptionPane.PLAIN_MESSAGE);
 
 		// Lägg till själva användaren
-		users.add(new User(name));
+		this.user = (new User(name));
 
+		users.add(new User(name));
 		GameBoard gb = new GameBoard(users);
-		User user = gb.getUser(0);
+//		User user = gb.getUser(0);
 		gb.setupGame();
 		
 		// String currentPlayer = gb.getActiveUser().getName(); //Kan endast
@@ -421,6 +423,7 @@ public class UnoGUI extends Application {
 
 	public void update() {
 		String message = pim.readFromMailbox();
+		System.out.println("In unogui update: " + message);
 		switch (message.substring(0, 1)) {
 		case ("R"):
 			runGame = true;
@@ -436,6 +439,10 @@ public class UnoGUI extends Application {
 		ImageView imvP = new ImageView();
 		imvP.setImage(imageP);
 		this.playb.setGraphic(imvP);
+			break;
+		case ("D"):
+			//user.addCard(new Card(message.substring(2)));
+			System.out.println("New card added to " + this.user.getName() + ": " + message.substring(2));
 			break;
 		default:
 			break;

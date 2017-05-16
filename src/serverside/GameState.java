@@ -30,6 +30,7 @@ public class GameState extends Thread {
 	private void getGameBoardInfo(){
 		if(!info.isEmpty()){
 			String message = info.remove();
+			System.out.println(message);
 			switch(message.substring(0, 1)){
 			case ("T"):
 				mm.addToOutMailbox("A " + message);
@@ -37,6 +38,10 @@ public class GameState extends Thread {
 			case ("L"):
 				mm.addToOutMailbox("A " + message);
 				break;
+			case ("D"):
+				System.out.println("in gameState: P"+ message.substring(1, 2) + " " + message.substring(3));
+				mm.addToOutMailbox("P" + message.substring(1, 2) + "D " + message.substring(3));	
+			break;
 			default:
 				break;
 			}

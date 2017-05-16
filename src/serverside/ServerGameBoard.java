@@ -22,10 +22,18 @@ public class ServerGameBoard {
 	
 	public void setupGame() {
 		deck = new Deck();
+		Card card;
+		LinkedList<StringBuilder> sb = new LinkedList<StringBuilder>();
+		for (int i = 0; i < users.size(); i++) {
+			sb.add(new StringBuilder());
+			sb.get(i).append("D" + (i+1) + " ");			
+		}
 		// Delar ut 7 kort till spelarna
 		for (int i = 0; i < 7 ; i++) {
 			for (int j = 0; j < users.size(); j++) {
-				users.get(j).addCard(deck.draw());
+				card = deck.draw();
+				users.get(j).addCard(card);
+				sb.get(j).append(card.toString() + " ");
 			}
 		}
 
@@ -43,6 +51,10 @@ public class ServerGameBoard {
 		sendToGameState("L " + deck.getLastPlayed().toString());
 		System.out.println("In sgb, last played: " + deck.getLastPlayed().toString());
 		sendToGameState("T P"+ (playerTurn+1));
+		for (int i = 0; i < sb.size(); i++) {
+			sendToGameState(sb.get(i).toString());
+			System.out.println("I ServerGameBoard, kort delas ut: " + sb.get(i).toString());
+		}
 	}
 	
 	private void sendToGameState(String message){
