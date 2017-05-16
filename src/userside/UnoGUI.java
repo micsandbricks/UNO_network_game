@@ -176,27 +176,7 @@ public class UnoGUI extends Application {
 					if (change.wasAdded()) {
 						index = obsTb.size() - 1;
 						final int i = index;
-						System.out.println("added a card");
-						// h�nder om ett kort blivit tillagt - setOnAction
-						obsTb.get(index).setOnAction(a -> {
-							if (tb.get(i).isSelected()) {
-								cardsToPlay.add(user.getHand().get(i));
-								ta.appendText(user.getHand().get(i).getColour()
-										+ Integer.toString(user.getHand().get(i).getValue()) + " is selected \n");
-								tb.get(i).setText(Integer.toString(cardsToPlay.size()));
-							} else {
-								cardsToPlay.remove(user.getHand().get(i));
-								ta.appendText(user.getHand().get(i).toString() + " is deselected \n");
-								tb.get(i).setText("");
-								for (int k = 0; k < tb.size(); k++) {
-									if (cardsToPlay.indexOf(user.getHand().get(k)) >= 0) {
-										tb.get(k).setText(
-												Integer.toString(cardsToPlay.indexOf(user.getHand().get(k)) + 1));
-									}
-								}
-
-							}
-						});
+						System.out.println("added a card");						
 					} else {
 						// händer annars
 						System.out.println("card was removed?");
@@ -207,10 +187,32 @@ public class UnoGUI extends Application {
 
 		// Skapar en ny
 		for (int i = 0; i < user.getHand().size(); i++) {
-			obsTb.add(new ToggleButton());
-			obsTb.get(i).setGraphic(
+			ToggleButton newTb = new ToggleButton();
+			obsTb.add(newTb);
+			newTb.setOnAction(a -> {
+				int x = obsTb.indexOf(newTb);
+				if (newTb.isSelected()) {
+					cardsToPlay.add(user.getHand().get(x));
+					ta.appendText(user.getHand().get(x).getColour()
+							+ Integer.toString(user.getHand().get(x).getValue()) + " is selected \n");
+					tb.get(x).setText(Integer.toString(cardsToPlay.size()));
+				} else {
+					System.out.println(tb.size() + " " + x);
+					cardsToPlay.remove(user.getHand().get(x));
+					ta.appendText(user.getHand().get(x).toString() + " is deselected \n");
+					tb.get(x).setText("");
+					for (int k = 0; k < tb.size(); k++) {
+						Card userCard = user.getHand().get(k);
+						if (cardsToPlay.indexOf(userCard) >= 0) {
+							tb.get(k).setText(
+									Integer.toString(cardsToPlay.indexOf(user.getHand().get(k)) + 1));
+						}
+					}
+				}
+			});
+			tb.getLast().setGraphic(
 					new ImageView(new Image(getClass().getResourceAsStream(user.getHand().get(i).getImgLink()))));
-			obsTb.get(i).getStylesheets().add(UnoGUI.class.getResource("ToggleB_Hand.css").toExternalForm());
+			tb.getLast().getStylesheets().add(UnoGUI.class.getResource("ToggleB_Hand.css").toExternalForm());
 		}
 
 		/* Event f�r objekt */
@@ -265,12 +267,34 @@ public class UnoGUI extends Application {
 				ta.appendText("draw new card \n");
 
 				// Lägger till ny knapp när nytt kort dras
-				obsTb.add(new ToggleButton());
+				ToggleButton newTb = new ToggleButton();
+				obsTb.add(newTb);
+				newTb.setOnAction(a -> {
+					int x = obsTb.indexOf(newTb);
+					if (newTb.isSelected()) {
+						cardsToPlay.add(user.getHand().get(x));
+						ta.appendText(user.getHand().get(x).getColour()
+								+ Integer.toString(user.getHand().get(x).getValue()) + " is selected \n");
+						tb.get(x).setText(Integer.toString(cardsToPlay.size()));
+					} else {
+						System.out.println(tb.size() + " " + x);
+						cardsToPlay.remove(user.getHand().get(x));
+						ta.appendText(user.getHand().get(x).toString() + " is deselected \n");
+						tb.get(x).setText("");
+						for (int k = 0; k < tb.size(); k++) {
+							Card userCard = user.getHand().get(k);
+							if (cardsToPlay.indexOf(userCard) >= 0) {
+								tb.get(k).setText(
+										Integer.toString(cardsToPlay.indexOf(user.getHand().get(k)) + 1));
+							}
+						}
+					}
+				});
+				
 				tb.getLast().setGraphic(new ImageView(
 						new Image(getClass().getResourceAsStream(user.getHand().getLast().getImgLink()))));
 				tb.getLast().getStylesheets().add(UnoGUI.class.getResource("ToggleB_Hand.css").toExternalForm());
 				flow.getChildren().add(tb.getLast());
-
 			}
 		});
 
@@ -302,11 +326,32 @@ public class UnoGUI extends Application {
 
 					ta.appendText("Last played " + gb.getDeck().getLastPlayed().toString() + "\n");
 
-					// Raderar de markerade korten - de lagda korten - fr�n
-					// flow
-					for (int i = 0; i < user.getHand().size(); i++) {
+					// Raderar de markerade korten - de lagda korten - från flow
+					int tb_length = tb.size();
+					int selectedCards = 0;
+					int removedCards = 0;
+
+					for (int i = 0; i < tb.size(); i++) {
 						if (tb.get(i).isSelected() == true) {
-							flow.getChildren().remove(tb.get(i));
+							selectedCards++;
+						}
+					}
+					System.out.println("amount of selected cards: " + selectedCards);
+
+					int index = 0;
+					while (removedCards != selectedCards) {
+						if (index < tb.size()) {
+							if (tb.get(index).isSelected()) {
+								System.out.println("Selected card");
+								flow.getChildren().remove(tb.get(index));
+								obsTb.remove(index);
+								System.out.println("lengths are equal: " + (obsTb.size() == tb.size()));
+								removedCards++;
+							}
+							index++;
+						} else {
+							index = 0;
+
 						}
 					}
 
