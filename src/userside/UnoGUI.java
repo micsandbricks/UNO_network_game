@@ -423,8 +423,11 @@ public class UnoGUI extends Application {
 		case ("R"):
 			runGame = true;
 			break;
+		case ("T"):
+			this.ta.appendText("It is turn for " + message.substring(2, 4) + '\n');
+			// System.out.println("Reached GUI message: " + message);
+			break;
 		default:
-			this.ta.appendText(message + '\n');
 			break;
 		}
 	}

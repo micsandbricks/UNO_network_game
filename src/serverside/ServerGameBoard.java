@@ -12,9 +12,11 @@ public class ServerGameBoard {
 	int playerTurn;
 	boolean clockwise;
 	char chosenColour;
+	GameState gamestate;
 	
-	public ServerGameBoard(LinkedList<User> users) {
+	public ServerGameBoard(LinkedList<User> users, GameState gamestate) {
 		this.users = users;
+		this.gamestate = gamestate;
 	}
 	
 	public void setupGame() {
@@ -37,6 +39,11 @@ public class ServerGameBoard {
 		playerTurn = rand.nextInt(users.size());
 		System.out.println("user size: " + users.size());
 		System.out.println("playerturn: " + playerTurn);
+		sendToGameState("T P"+ (playerTurn+1));
+	}
+	
+	private void sendToGameState(String message){
+		gamestate.addtoInfo(message);
 	}
 
 }

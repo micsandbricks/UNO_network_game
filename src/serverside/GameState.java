@@ -8,6 +8,7 @@ public class GameState extends Thread {
 
 	private MailboxMonitor mm;
 	private LinkedList<User> users = new LinkedList<User>();
+	private LinkedList<String> info = new LinkedList<String>();
 	private ServerGameBoard serverGameBoard;
 	private boolean running = false;
 
@@ -19,6 +20,22 @@ public class GameState extends Thread {
 	public void run() {
 		while (!interrupted()) {
 			getMessageAndCompute();
+			getGameBoardInfo();
+		}
+	}
+	public void addtoInfo(String message){
+		info.add(message);
+	}
+	private void getGameBoardInfo(){
+		if(!info.isEmpty()){
+			String message = info.remove();
+			switch(message.substring(0, 1)){
+			case ("T"):
+				mm.addToOutMailbox("A "+message);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
@@ -40,7 +57,7 @@ public class GameState extends Thread {
 			case ("S"):
 				int numberPlayers = Integer.parseInt(message.substring(4,5));
 			if(users.size() == numberPlayers){
-				this.serverGameBoard = new ServerGameBoard(users);
+				this.serverGameBoard = new ServerGameBoard(users, this);
 				serverGameBoard.setupGame();
 				running = true;
 			}
