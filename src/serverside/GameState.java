@@ -32,7 +32,10 @@ public class GameState extends Thread {
 			String message = info.remove();
 			switch(message.substring(0, 1)){
 			case ("T"):
-				mm.addToOutMailbox("A "+message);
+				mm.addToOutMailbox("A " + message);
+				break;
+			case ("L"):
+				mm.addToOutMailbox("A " + message);
 				break;
 			default:
 				break;

@@ -39,6 +39,8 @@ public class UnoGUI extends Application {
 	private PlayerInputMonitor pim;
 	private Stage primaryStage;
 	private boolean runGame = false;
+	private Card lastPlayed = new Card('r', 00);
+	private Button playb;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -108,9 +110,9 @@ public class UnoGUI extends Application {
 		drawb.setId("draw");
 		drawb.setGraphic(imvD);
 
-		Button playb = new Button();
+		this.playb = new Button();
 
-		Image imageP = new Image(getClass().getResource(gb.getDeck().getLastPlayed().getImgLink()).toExternalForm(),
+		Image imageP = new Image(getClass().getResource(lastPlayed.getImgLink()).toExternalForm(),
 				180, 270, true, true);
 		ImageView imvP = new ImageView();
 		imvP.setImage(imageP);
@@ -155,16 +157,7 @@ public class UnoGUI extends Application {
 		colourFlow.setVisible(false);
 
 		// För att visa korten på hand:
-		LinkedList<ToggleButton> tb = new LinkedList<ToggleButton>(); // Denna
-																		// lista
-																		// ska
-																		// vara
-																		// så
-																		// stor
-																		// som
-																		// handen
-																		// har
-																		// kort
+		LinkedList<ToggleButton> tb = new LinkedList<ToggleButton>();
 		LinkedList<Card> cardsToPlay = new LinkedList<Card>();
 
 		// Skapa en obslist som h�ller koll p� f�r�ndringar i listan
@@ -434,6 +427,15 @@ public class UnoGUI extends Application {
 			break;
 		case ("T"):
 			this.ta.appendText("It is turn for " + message.substring(2, 4) + '\n');
+			break;
+		case ("L"):
+			lastPlayed = new Card(message.substring(2));
+		System.out.println("Last played: " + lastPlayed.toString());
+		Image imageP = new Image(getClass().getResource(lastPlayed.getImgLink()).toExternalForm(),
+				180, 270, true, true);
+		ImageView imvP = new ImageView();
+		imvP.setImage(imageP);
+		this.playb.setGraphic(imvP);
 			break;
 		default:
 			break;

@@ -40,6 +40,8 @@ public class ServerGameBoard {
 		playerTurn = rand.nextInt(users.size());
 		System.out.println("user size: " + users.size());
 		System.out.println("playerturn: " + playerTurn);
+		sendToGameState("L " + deck.getLastPlayed().toString());
+		System.out.println("In sgb, last played: " + deck.getLastPlayed().toString());
 		sendToGameState("T P"+ (playerTurn+1));
 	}
 	
