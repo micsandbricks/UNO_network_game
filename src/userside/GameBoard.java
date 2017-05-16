@@ -164,6 +164,7 @@ public class GameBoard {
 
 			while (!cards.isEmpty()) {
 				c = cards.remove();
+				System.out.println(playerTurn);
 				users.get(playerTurn).removeCard(c);
 				deck.play(c);
 			}
