@@ -24,8 +24,6 @@ public class MailboxMonitor {
 	// Reads messages from the in_mailbox queue:
 	private GameState gs;
 
-	private boolean runGame = false;
-
 	public MailboxMonitor() {
 		this.gs = new GameState(this);
 		gs.start();
@@ -103,5 +101,9 @@ public class MailboxMonitor {
 			break;
 		}
 		notifyAll();
+	}
+
+	public boolean gameStateRunning() {
+		return gs.running();
 	}
 }

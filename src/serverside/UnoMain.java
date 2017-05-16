@@ -17,7 +17,7 @@ public class UnoMain {
 	public static void main(String[] args) {
 
 		boolean runGame = false;
-		
+
 		UNOserver us = null;
 		MailboxMonitor mailMonitor = new MailboxMonitor();
 
@@ -39,16 +39,24 @@ public class UnoMain {
 				mailMonitor.addPlayer(playerSocket);
 				numberPlayers++;
 				if (numberPlayers == num)
-					runGame =true;
+					runGame = true;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		mailMonitor.addToOutMailbox("A R");
+		while (!mailMonitor.gameStateRunning()) {
+			mailMonitor.addToInMailbox("   S" + num);
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		// The game loop
-		while (runGame){
-			
+		while (runGame) {
+
 		}
 	}
 }
