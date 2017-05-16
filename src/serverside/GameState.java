@@ -2,6 +2,7 @@ package serverside;
 
 import java.util.LinkedList;
 
+import userside.Card;
 import userside.User;
 
 public class GameState extends Thread {
@@ -62,6 +63,17 @@ public class GameState extends Thread {
 				running = true;
 			}
 				break;
+			case ("P"):
+				System.out.println(message);
+				String[] stringCards = message.substring(5).split(" ");
+				LinkedList<Card> cards = new LinkedList<Card>();
+				for(int i = 0; i < stringCards.length; i++){
+					cards.add(new Card(stringCards[i]));
+					System.out.println(cards.get(i).toString());
+				}
+				System.out.println("check cards = " + serverGameBoard.checkCards(cards));
+				break;
+				
 			default:
 				break;
 			}
