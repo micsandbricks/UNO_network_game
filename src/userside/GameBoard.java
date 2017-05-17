@@ -187,20 +187,23 @@ public class GameBoard {
 		return toSend.toString();
 	}
 
-	private int nextPlayer(int i) { //Den här metoden verkar itet funka som den ska
+	private int nextPlayer(int i) {
 		int temp = playerTurn;
 
-		if (clockwise) {
-			temp = temp + i;
-			while (temp > users.size()) {
-				temp = temp - users.size();
-			}
-		} else {
-			temp = temp - i;
-			while (temp < 0) {
-				temp = users.size() + temp;
+		for (int j = 0; j < i; j++ ) {
+			if (clockwise) {
+				temp++;
+				if (temp >= users.size()) {
+					temp = 0;
+				}
+			} else {
+				temp--;
+				if (temp < 0) {
+					temp = users.size()-1;
+				}
 			}
 		}
+		
 		return temp;
 
 	}

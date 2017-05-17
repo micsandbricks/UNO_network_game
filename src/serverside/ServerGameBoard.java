@@ -24,6 +24,14 @@ public class ServerGameBoard {
 		return deck;
 	}
 	
+	public void setPlayerTurn(int player) {
+		playerTurn = player;
+	}
+	
+	public User getCurrentUser() {
+		return users.get(playerTurn);
+	}
+	
 	public void setupGame() {
 		deck = new Deck();
 		Card card;
@@ -98,6 +106,27 @@ public class ServerGameBoard {
 		}
 
 		return true;		
+	}
+	
+	public int nextPlayer(int i) {
+		int temp = playerTurn;
+
+		for (int j = 0; j < i; j++ ) {
+			if (clockwise) {
+				temp++;
+				if (temp >= users.size()) {
+					temp = 0;
+				}
+			} else {
+				temp--;
+				if (temp < 0) {
+					temp = users.size()-1;
+				}
+			}
+		}
+		
+		return temp;
+
 	}
 
 }

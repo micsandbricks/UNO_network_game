@@ -84,6 +84,8 @@ public class GameState extends Thread {
 			case ("G"):
 				String card = serverGameBoard.getDeck().draw().toString();
 				mm.addToOutMailbox(message.substring(0,2) + "D " + card);
+				serverGameBoard.setPlayerTurn(serverGameBoard.nextPlayer(1));
+				mm.addToOutMailbox("A T " + serverGameBoard.getCurrentUser().getName());
 			default:
 				break;
 			}
