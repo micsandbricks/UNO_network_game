@@ -20,6 +20,10 @@ public class ServerGameBoard {
 		this.gamestate = gamestate;
 	}
 	
+	public Deck getDeck() {
+		return deck;
+	}
+	
 	public void setupGame() {
 		deck = new Deck();
 		Card card;

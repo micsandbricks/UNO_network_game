@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import userside.PlayerInputMonitor;
 import userside.PlayerOutputMonitor;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -50,6 +51,7 @@ public class UnoGUI extends Application {
 	private FlowPane flow;
 	private String currentPlayer;
 	private TextField tfp;
+	private boolean newCard = false;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -146,7 +148,7 @@ public class UnoGUI extends Application {
 		this.tf.setLayoutX(30);
 		this.tf.setLayoutY(340);
 		this.tf.setPrefSize(250, 25);
-		
+
 		this.tfp = new TextField("");
 		this.tfp.setLayoutX(550);
 		this.tfp.setLayoutY(30);
@@ -275,8 +277,13 @@ public class UnoGUI extends Application {
 		drawb.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				user.addCard(gb.getDeck().draw());
-				ta.appendText("draw new card \n");
+				//user.addCard(gb.getDeck().draw());
+				if (currentPlayer.equals(user.getName())) {
+					ta.appendText("draw new card \n");
+					pom.addToMailbox("G");					
+				} else {
+					ta.appendText("Please wait for your turn \n");
+				}
 
 
 			}
@@ -413,7 +420,9 @@ public class UnoGUI extends Application {
 		System.out.println(runGame);
 		primaryStage.show();
 
+
 	}
+
 	private void drawCard() {
 		// Lägger till ny knapp när nytt kort dras
 		ToggleButton newTb = new ToggleButton();
@@ -443,8 +452,9 @@ public class UnoGUI extends Application {
 		tb.getLast().setGraphic(new ImageView(
 				new Image(getClass().getResourceAsStream(user.getHand().getLast().getImgLink()))));
 		tb.getLast().getStylesheets().add(UnoGUI.class.getResource("ToggleB_Hand.css").toExternalForm());
-		flow.getChildren().add(tb.getLast());
-	}
+		this.flow.getChildren().add(tb.getLast());
+	};
+
 
 	public void update() {
 		String message = pim.readFromMailbox();
@@ -455,30 +465,36 @@ public class UnoGUI extends Application {
 		break;
 		case ("T"):
 			currentPlayer = message.substring(2);
-			this.ta.appendText("It is turn for " + currentPlayer + '\n');
-			if (currentPlayer.equals(user.getName())) {
-				this.tfp.setText("Your turn");
-			} else {
-				this.tfp.setText(currentPlayer + "'s turn");
+		this.ta.appendText("It is turn for " + currentPlayer + '\n');
+		if (currentPlayer.equals(user.getName())) {
+			this.tfp.setText("Your turn");
+		} else {
+			this.tfp.setText(currentPlayer + "'s turn");
 		}
 
 		break;
 		case ("L"):
 			lastPlayed = new Card(message.substring(2));
 		System.out.println("Last played: " + lastPlayed.toString());
-		Image imageP = new Image(getClass().getResource(lastPlayed.getImgLink()).toExternalForm(),
-				180, 270, true, true);
+		Image imageP = new Image(getClass().getResource(lastPlayed.getImgLink()).toExternalForm(), 180, 270, true,
+				true);
 		ImageView imvP = new ImageView();
 		imvP.setImage(imageP);
 		this.playb.setGraphic(imvP);
 		break;
 		case ("D"):
 			String[] cardsIn = message.substring(2).split(" ");
-		for (String str : cardsIn) {
-			user.addCard(new Card(str));
-			drawCard();
-			System.out.println("in Gui draw card: " + str);
-		}
+		Platform.runLater(() -> {
+			try {
+				for (String str : cardsIn) {
+					user.addCard(new Card(str));
+					drawCard();
+					System.out.println("in Gui draw card: " + str);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 		System.out.println("New card added to " + this.user.getName() + ": " + message.substring(2));
 		break;
 		default:

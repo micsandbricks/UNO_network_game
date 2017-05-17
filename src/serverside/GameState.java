@@ -81,7 +81,9 @@ public class GameState extends Thread {
 				}
 				System.out.println("check cards = " + serverGameBoard.checkCards(cards));
 				break;
-				
+			case ("G"):
+				String card = serverGameBoard.getDeck().draw().toString();
+				mm.addToOutMailbox(message.substring(0,2) + "D " + card);
 			default:
 				break;
 			}
