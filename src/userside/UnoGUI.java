@@ -27,6 +27,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class UnoGUI extends Application {
@@ -46,6 +48,8 @@ public class UnoGUI extends Application {
 	private LinkedList<ToggleButton> tb;
 	private LinkedList<Card> cardsToPlay;
 	private FlowPane flow;
+	private String currentPlayer;
+	private TextField tfp;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -60,9 +64,9 @@ public class UnoGUI extends Application {
 
 		users.add(new User(name));
 		GameBoard gb = new GameBoard(users);
-//		User user = gb.getUser(0);
+		//		User user = gb.getUser(0);
 		gb.setupGame();
-		
+
 		// String currentPlayer = gb.getActiveUser().getName(); //Kan endast
 		// spela om deta är "rätt"
 
@@ -142,6 +146,14 @@ public class UnoGUI extends Application {
 		this.tf.setLayoutX(30);
 		this.tf.setLayoutY(340);
 		this.tf.setPrefSize(250, 25);
+		
+		this.tfp = new TextField("");
+		this.tfp.setLayoutX(550);
+		this.tfp.setLayoutY(30);
+		this.tfp.setEditable(false);
+		this.tfp.setBackground(null);
+		this.tfp.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
+		this.tfp.setPrefSize(800, 50);
 
 		// Skapa fyra knappar för val av färg
 		Button[] setColourButtons = new Button[4];
@@ -286,80 +298,86 @@ public class UnoGUI extends Application {
 		playb.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				
-				StringBuilder sb = new StringBuilder();
-				sb.append("P ");
-				for(Card c : cardsToPlay){
-					sb.append(c.toString()+ " ");
+				if (currentPlayer.equals(user.getName())) {
+					ta.appendText("Yes, it is your turn to play! \n");
+
+					StringBuilder sb = new StringBuilder();
+					sb.append("P ");
+					for(Card c : cardsToPlay){
+						sb.append(c.toString()+ " ");
+					}
+					pom.addToMailbox(sb.toString());
+
+					//				// kolla att cardsToPlay inte är tom
+					//				if (gb.checkCards(cardsToPlay)) {
+					//					// om första kortet är svart -> välj färg och skicka
+					//					// till server
+					//					if (cardsToPlay.get(0).getColour() == 's') {
+					//						colourFlow.setVisible(true);
+					//					}
+					//					gb.playCards(cardsToPlay);
+					//					ta.appendText("cards played \n");
+					//
+					//					ta.appendText("Last played " + gb.getDeck().getLastPlayed().toString() + "\n");
+					//
+					//					// Raderar de markerade korten - de lagda korten - från flow
+					//					int tb_length = tb.size();
+					//					int selectedCards = 0;
+					//					int removedCards = 0;
+					//
+					//					for (int i = 0; i < tb.size(); i++) {
+					//						if (tb.get(i).isSelected() == true) {
+					//							selectedCards++;
+					//						}
+					//					}
+					//					System.out.println("amount of selected cards: " + selectedCards);
+					//
+					//					int index = 0;
+					//					while (removedCards != selectedCards) {
+					//						if (index < tb.size()) {
+					//							if (tb.get(index).isSelected()) {
+					//								System.out.println("Selected card");
+					//								flow.getChildren().remove(tb.get(index));
+					//								obsTb.remove(index);
+					//								System.out.println("lengths are equal: " + (obsTb.size() == tb.size()));
+					//								removedCards++;
+					//							}
+					//							index++;
+					//						} else {
+					//							index = 0;
+					//
+					//						}
+					//					}
+					//
+					//					// Sätt alla togglebuttons till icke-valda
+					//					for (int i = 0; i < user.getHand().size(); i++) {
+					//						tb.get(i).setSelected(false);
+					//						tb.get(i).setText("");
+					//					}
+					//
+					//					// Byt översta kortet till det senast spelade
+					//					Image imageP = new Image(
+					//							getClass().getResource(gb.getDeck().getLastPlayed().getImgLink()).toExternalForm(), 180,
+					//							270, true, true);
+					//					ImageView imvP = new ImageView();
+					//					imvP.setImage(imageP);
+					//					playb.setGraphic(imvP);
+					//
+					//				} else {
+					//					ta.appendText("no cards chosen \n");
+					//					for (int i = 0; i < user.getHand().size(); i++) {
+					//						tb.get(i).setSelected(false);
+					//						tb.get(i).setText("");
+					//					}
+					//				}
+					//
+					//				while (!cardsToPlay.isEmpty()) {
+					//					cardsToPlay.remove();
+					//				}
+				} else {
+					ta.appendText("Please wait for your turn \n");
+
 				}
-				pom.addToMailbox(sb.toString());
-				
-//				// kolla att cardsToPlay inte är tom
-//				if (gb.checkCards(cardsToPlay)) {
-//					// om första kortet är svart -> välj färg och skicka
-//					// till server
-//					if (cardsToPlay.get(0).getColour() == 's') {
-//						colourFlow.setVisible(true);
-//					}
-//					gb.playCards(cardsToPlay);
-//					ta.appendText("cards played \n");
-//
-//					ta.appendText("Last played " + gb.getDeck().getLastPlayed().toString() + "\n");
-//
-//					// Raderar de markerade korten - de lagda korten - från flow
-//					int tb_length = tb.size();
-//					int selectedCards = 0;
-//					int removedCards = 0;
-//
-//					for (int i = 0; i < tb.size(); i++) {
-//						if (tb.get(i).isSelected() == true) {
-//							selectedCards++;
-//						}
-//					}
-//					System.out.println("amount of selected cards: " + selectedCards);
-//
-//					int index = 0;
-//					while (removedCards != selectedCards) {
-//						if (index < tb.size()) {
-//							if (tb.get(index).isSelected()) {
-//								System.out.println("Selected card");
-//								flow.getChildren().remove(tb.get(index));
-//								obsTb.remove(index);
-//								System.out.println("lengths are equal: " + (obsTb.size() == tb.size()));
-//								removedCards++;
-//							}
-//							index++;
-//						} else {
-//							index = 0;
-//
-//						}
-//					}
-//
-//					// Sätt alla togglebuttons till icke-valda
-//					for (int i = 0; i < user.getHand().size(); i++) {
-//						tb.get(i).setSelected(false);
-//						tb.get(i).setText("");
-//					}
-//
-//					// Byt översta kortet till det senast spelade
-//					Image imageP = new Image(
-//							getClass().getResource(gb.getDeck().getLastPlayed().getImgLink()).toExternalForm(), 180,
-//							270, true, true);
-//					ImageView imvP = new ImageView();
-//					imvP.setImage(imageP);
-//					playb.setGraphic(imvP);
-//
-//				} else {
-//					ta.appendText("no cards chosen \n");
-//					for (int i = 0; i < user.getHand().size(); i++) {
-//						tb.get(i).setSelected(false);
-//						tb.get(i).setText("");
-//					}
-//				}
-//
-//				while (!cardsToPlay.isEmpty()) {
-//					cardsToPlay.remove();
-//				}
 			}
 		});
 
@@ -367,7 +385,7 @@ public class UnoGUI extends Application {
 		for (int i = 0; i < tb.size(); i++) {
 			flow.getChildren().add(tb.get(i));
 		}
-		pane.getChildren().addAll(ta, tf, scroll, unob, drawb, playb, colourFlow);
+		pane.getChildren().addAll(ta, tf, scroll, unob, drawb, playb, colourFlow, tfp);
 
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
@@ -421,7 +439,7 @@ public class UnoGUI extends Application {
 				}
 			}
 		});
-		
+
 		tb.getLast().setGraphic(new ImageView(
 				new Image(getClass().getResourceAsStream(user.getHand().getLast().getImgLink()))));
 		tb.getLast().getStylesheets().add(UnoGUI.class.getResource("ToggleB_Hand.css").toExternalForm());
@@ -434,10 +452,17 @@ public class UnoGUI extends Application {
 		switch (message.substring(0, 1)) {
 		case ("R"):
 			runGame = true;
-			break;
+		break;
 		case ("T"):
-			this.ta.appendText("It is turn for " + message.substring(2, 4) + '\n');
-			break;
+			currentPlayer = message.substring(2);
+			this.ta.appendText("It is turn for " + currentPlayer + '\n');
+			if (currentPlayer.equals(user.getName())) {
+				this.tfp.setText("Your turn");
+			} else {
+				this.tfp.setText(currentPlayer + "'s turn");
+		}
+
+		break;
 		case ("L"):
 			lastPlayed = new Card(message.substring(2));
 		System.out.println("Last played: " + lastPlayed.toString());
@@ -446,17 +471,16 @@ public class UnoGUI extends Application {
 		ImageView imvP = new ImageView();
 		imvP.setImage(imageP);
 		this.playb.setGraphic(imvP);
-			break;
+		break;
 		case ("D"):
 			String[] cardsIn = message.substring(2).split(" ");
-			for (String str : cardsIn) {
-				user.addCard(new Card(str));
-				drawCard();
-				System.out.println("in Gui draw card: " + str);
-			}
-			//user.addCard(new Card(message.substring(2)));
-			System.out.println("New card added to " + this.user.getName() + ": " + message.substring(2));
-			break;
+		for (String str : cardsIn) {
+			user.addCard(new Card(str));
+			drawCard();
+			System.out.println("in Gui draw card: " + str);
+		}
+		System.out.println("New card added to " + this.user.getName() + ": " + message.substring(2));
+		break;
 		default:
 			break;
 		}

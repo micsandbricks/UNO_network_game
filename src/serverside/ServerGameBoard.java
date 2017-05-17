@@ -50,7 +50,8 @@ public class ServerGameBoard {
 		System.out.println("playerturn: " + playerTurn);
 		sendToGameState("L " + deck.getLastPlayed().toString());
 		System.out.println("In sgb, last played: " + deck.getLastPlayed().toString());
-		sendToGameState("T P"+ (playerTurn+1));
+		sendToGameState("T " + users.get(playerTurn).getName());
+		System.out.println("in ServerGameBoard, playerTurn: " + users.get(playerTurn).getName());
 		for (int i = 0; i < sb.size(); i++) {
 			sendToGameState(sb.get(i).toString());
 			System.out.println("I ServerGameBoard, kort delas ut: " + sb.get(i).toString());

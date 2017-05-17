@@ -60,7 +60,7 @@ public class GameState extends Thread {
 				mm.addToOutMailbox(message);
 			break;
 			case ("N"):
-				users.add(new User(message.substring(2)));
+				users.add(new User(message.substring(5)));
 				System.out.println((users.toString()));
 				break;
 			case ("S"):
