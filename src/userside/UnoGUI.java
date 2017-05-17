@@ -42,6 +42,10 @@ public class UnoGUI extends Application {
 	private Card lastPlayed = new Card('r', 00);
 	private Button playb;
 	private User user;
+	private ObservableList<ToggleButton> obsTb;
+	private LinkedList<ToggleButton> tb;
+	private LinkedList<Card> cardsToPlay;
+	private FlowPane flow;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -74,7 +78,7 @@ public class UnoGUI extends Application {
 		scroll.setLayoutY(500);
 		scroll.setPrefSize(1130, 300);
 
-		FlowPane flow = new FlowPane();
+		this.flow = new FlowPane();
 		flow.setVgap(6);
 		flow.setHgap(2);
 		flow.setPrefWrapLength(1110); // preferred width = 300
@@ -159,11 +163,11 @@ public class UnoGUI extends Application {
 		colourFlow.setVisible(false);
 
 		// För att visa korten på hand:
-		LinkedList<ToggleButton> tb = new LinkedList<ToggleButton>();
-		LinkedList<Card> cardsToPlay = new LinkedList<Card>();
+		this.tb = new LinkedList<ToggleButton>();
+		this.cardsToPlay = new LinkedList<Card>();
 
 		// Skapa en obslist som h�ller koll p� f�r�ndringar i listan
-		ObservableList<ToggleButton> obsTb = FXCollections.observableList(tb);
+		this.obsTb = FXCollections.observableList(tb);
 		obsTb.addListener(new ListChangeListener<Object>() {
 			@Override
 			public void onChanged(javafx.collections.ListChangeListener.Change<? extends Object> change) {
@@ -262,35 +266,7 @@ public class UnoGUI extends Application {
 				user.addCard(gb.getDeck().draw());
 				ta.appendText("draw new card \n");
 
-				// Lägger till ny knapp när nytt kort dras
-				ToggleButton newTb = new ToggleButton();
-				obsTb.add(newTb);
-				newTb.setOnAction(a -> {
-					int x = obsTb.indexOf(newTb);
-					if (newTb.isSelected()) {
-						cardsToPlay.add(user.getHand().get(x));
-						ta.appendText(user.getHand().get(x).getColour()
-								+ Integer.toString(user.getHand().get(x).getValue()) + " is selected \n");
-						tb.get(x).setText(Integer.toString(cardsToPlay.size()));
-					} else {
-						System.out.println(tb.size() + " " + x);
-						cardsToPlay.remove(user.getHand().get(x));
-						ta.appendText(user.getHand().get(x).toString() + " is deselected \n");
-						tb.get(x).setText("");
-						for (int k = 0; k < tb.size(); k++) {
-							Card userCard = user.getHand().get(k);
-							if (cardsToPlay.indexOf(userCard) >= 0) {
-								tb.get(k).setText(
-										Integer.toString(cardsToPlay.indexOf(user.getHand().get(k)) + 1));
-							}
-						}
-					}
-				});
-				
-				tb.getLast().setGraphic(new ImageView(
-						new Image(getClass().getResourceAsStream(user.getHand().getLast().getImgLink()))));
-				tb.getLast().getStylesheets().add(UnoGUI.class.getResource("ToggleB_Hand.css").toExternalForm());
-				flow.getChildren().add(tb.getLast());
+
 			}
 		});
 
@@ -420,6 +396,37 @@ public class UnoGUI extends Application {
 		primaryStage.show();
 
 	}
+	private void drawCard() {
+		// Lägger till ny knapp när nytt kort dras
+		ToggleButton newTb = new ToggleButton();
+		obsTb.add(newTb);
+		newTb.setOnAction(a -> {
+			int x = obsTb.indexOf(newTb);
+			if (newTb.isSelected()) {
+				cardsToPlay.add(user.getHand().get(x));
+				ta.appendText(user.getHand().get(x).getColour()
+						+ Integer.toString(user.getHand().get(x).getValue()) + " is selected \n");
+				tb.get(x).setText(Integer.toString(cardsToPlay.size()));
+			} else {
+				System.out.println(tb.size() + " " + x);
+				cardsToPlay.remove(user.getHand().get(x));
+				ta.appendText(user.getHand().get(x).toString() + " is deselected \n");
+				tb.get(x).setText("");
+				for (int k = 0; k < tb.size(); k++) {
+					Card userCard = user.getHand().get(k);
+					if (cardsToPlay.indexOf(userCard) >= 0) {
+						tb.get(k).setText(
+								Integer.toString(cardsToPlay.indexOf(user.getHand().get(k)) + 1));
+					}
+				}
+			}
+		});
+		
+		tb.getLast().setGraphic(new ImageView(
+				new Image(getClass().getResourceAsStream(user.getHand().getLast().getImgLink()))));
+		tb.getLast().getStylesheets().add(UnoGUI.class.getResource("ToggleB_Hand.css").toExternalForm());
+		flow.getChildren().add(tb.getLast());
+	}
 
 	public void update() {
 		String message = pim.readFromMailbox();
@@ -441,6 +448,12 @@ public class UnoGUI extends Application {
 		this.playb.setGraphic(imvP);
 			break;
 		case ("D"):
+			String[] cardsIn = message.substring(2).split(" ");
+			for (String str : cardsIn) {
+				user.addCard(new Card(str));
+				drawCard();
+				System.out.println("in Gui draw card: " + str);
+			}
 			//user.addCard(new Card(message.substring(2)));
 			System.out.println("New card added to " + this.user.getName() + ": " + message.substring(2));
 			break;
