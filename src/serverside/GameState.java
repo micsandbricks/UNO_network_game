@@ -42,6 +42,8 @@ public class GameState extends Thread {
 				System.out.println("in gameState: P"+ message.substring(1, 2) + " " + message.substring(3));
 				mm.addToOutMailbox("P" + message.substring(1, 2) + "D " + message.substring(3));	
 			break;
+			case ("P"):
+				mm.addToOutMailbox("P" + message.substring(1,2) + "P ");
 			default:
 				break;
 			}
@@ -79,6 +81,14 @@ public class GameState extends Thread {
 					cards.add(new Card(stringCards[i]));
 					System.out.println(cards.get(i).toString());
 				}
+				if (serverGameBoard.checkCards(cards)) {
+					//Spela korten
+					serverGameBoard.playCards(cards);
+				} else {
+					//Får inte spela dessa kort
+					mm.addToOutMailbox("");
+				}
+				
 				System.out.println("check cards = " + serverGameBoard.checkCards(cards));
 				break;
 			case ("G"):

@@ -386,7 +386,6 @@ public class UnoGUI extends Application {
 					// }
 				} else {
 					ta.appendText("Please wait for your turn \n");
-
 				}
 			}
 		});
@@ -423,6 +422,47 @@ public class UnoGUI extends Application {
 		System.out.println(runGame);
 		primaryStage.show();
 
+	}
+	
+	private void removeCards(){
+		// Raderar de markerade korten - de lagda korten - från flow
+
+		int selectedCards = 0;
+		int removedCards = 0;
+
+		for (int i = 0; i < tb.size(); i++) {
+			if (tb.get(i).isSelected() == true) {
+				selectedCards++;
+			}
+		}
+		System.out.println("amount of selected cards: " +
+				selectedCards);
+
+		int index = 0;
+		while (removedCards != selectedCards) {
+			if (index < tb.size()) {
+				if (tb.get(index).isSelected()) {
+					System.out.println("Selected card");
+					flow.getChildren().remove(tb.get(index));
+					obsTb.remove(index);
+					System.out.println("lengths are equal: " + (obsTb.size()
+							== tb.size()));
+					removedCards++;
+				}
+				index++;
+			} else {
+				index = 0;
+
+			}
+		}
+		
+		for(Card c : cardsToPlay){
+			user.removeCard(c);
+		}
+		
+		while (!cardsToPlay.isEmpty()) {
+			cardsToPlay.remove();
+		}
 	}
 
 	private void drawCard() {
@@ -480,6 +520,8 @@ public class UnoGUI extends Application {
 
 			break;
 		case ("L"):
+			Platform.runLater(() -> {
+				try {
 			lastPlayed = new Card(message.substring(2));
 			System.out.println("Last played: " + lastPlayed.toString());
 			Image imageP = new Image(getClass().getResource(lastPlayed.getImgLink()).toExternalForm(), 180, 270, true,
@@ -487,6 +529,10 @@ public class UnoGUI extends Application {
 			ImageView imvP = new ImageView();
 			imvP.setImage(imageP);
 			this.playb.setGraphic(imvP);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
 			break;
 		case ("D"):
 			String[] cardsIn = message.substring(2).split(" ");
@@ -503,6 +549,14 @@ public class UnoGUI extends Application {
 			});
 			System.out.println("New card added to " + this.user.getName() + ": " + message.substring(2));
 			break;
+		case ("P"):
+			Platform.runLater(() -> {
+				try {
+					removeCards();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
 		default:
 			break;
 		}
