@@ -122,12 +122,12 @@ public class ServerGameBoard {
 			playerTurn = nextPlayer(cards.size() + 1);
 
 		} else if (cards.get(0).getValue() == 11) { // nästa drar n*2 kort
-			int next = uglyNextPlayer(2);
+			int next = uglyNextPlayer(1);
 			StringBuilder card = new StringBuilder();
 			for(int i = 0; i < cards.size()*2; i++){
 				card.append(deck.draw().toString() + " ");
 			}
-			sendToGameState("D"+ next + " " + card.toString());
+			sendToGameState("D"+ (next+1) + " " + card.toString());
 
 			playerTurn = nextPlayer(2);
 
