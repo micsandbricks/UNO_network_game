@@ -39,6 +39,7 @@ public class PlayerReader extends Thread {
 	private void readPlayer() throws IOException {
 		String message = "";
 		message = buffRead.readLine();
+		System.out.println("In playerreader: " + message);
 		this.mailboxMonitor.addToInMailbox("P" + playerInt + " " + message);
 	}
 

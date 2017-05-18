@@ -12,7 +12,7 @@ public class ServerGameBoard {
 	Deck deck;
 	int playerTurn;
 	boolean clockwise;
-	char chosenColour;
+	char chosenColor;
 	GameState gamestate;
 
 	public ServerGameBoard(LinkedList<User> users, GameState gamestate) {
@@ -30,6 +30,17 @@ public class ServerGameBoard {
 
 	public User getCurrentUser() {
 		return users.get(playerTurn);
+	}
+
+	public void setColor(String color) {
+		char c = color.charAt(0);
+		chosenColor = c;
+	}
+	public void setUno(int i, boolean b){
+		users.get(i).setUno(b);
+	}
+	public boolean hasUno(int i){
+		return users.get(i).hasUno();
 	}
 
 	public void setupGame() {
@@ -94,7 +105,7 @@ public class ServerGameBoard {
 		// Svart kort är lagt -> Endast vald färg får läggas.
 		if (deck.getLastPlayed().getColour() == 's') {
 			char temp = cards.get(0).getColour();
-			if (cards.get(0).getColour() == chosenColour) {
+			if (cards.get(0).getColour() == chosenColor) {
 				return true;
 			} else {
 				return false;
@@ -115,39 +126,52 @@ public class ServerGameBoard {
 		int currentPlayer = playerTurn;
 
 		if (cards.get(0).getValue() < 10) {
+			// Gör färgtextruta osynlig
+			sendToGameState("K");
 			// (korten läggs och) turen går vidare
 			playerTurn = nextPlayer(1);
 
 		} else if (cards.get(0).getValue() == 10) { // hoppa över spelare
+			sendToGameState("K");
 			playerTurn = nextPlayer(cards.size() + 1);
 
 		} else if (cards.get(0).getValue() == 11) { // nästa drar n*2 kort
+			sendToGameState("K");
 			int next = uglyNextPlayer(1);
 			StringBuilder card = new StringBuilder();
-			for(int i = 0; i < cards.size()*2; i++){
+			for (int i = 0; i < cards.size() * 2; i++) {
 				card.append(deck.draw().toString() + " ");
 			}
-			sendToGameState("D"+ (next+1) + " " + card.toString());
+			sendToGameState("D" + (next + 1) + " " + card.toString());
 
 			playerTurn = nextPlayer(2);
 
-		} /*
-			 * else if (cards.get(0).getValue() == 12) { //byt håll if
-			 * (cards.size() % 2 == 1) { clockwise = !clockwise; } playerTurn =
-			 * nextPlayer(1); } else if (cards.get(0).getValue() == 13) { //byt
-			 * färg playerTurn = nextPlayer(1);
-			 * 
-			 * } else if (cards.get(0).getValue() == 14) { //nästa drar n*4 nya
-			 * int next = nextPlayer(1);
-			 * 
-			 * if (cards.size()*4 < 10) { toSend.append("D:" + next + "0" +
-			 * cards.size()*2 + '\n'); } else { toSend.append("D:" + next +
-			 * cards.size()*2 + '\n'); }
-			 * 
-			 * playerTurn = nextPlayer(2); //byt färg
-			 * 
-			 * }
-			 */
+		} else if (cards.get(0).getValue() == 12) { // byt håll
+			sendToGameState("K");
+			if (cards.size() % 2 == 1) {
+				clockwise = !clockwise;
+			}
+			playerTurn = nextPlayer(1);
+
+		} else if (cards.get(0).getValue() == 13) {
+			sendToGameState("J " + chosenColor);
+			playerTurn = nextPlayer(1);
+		
+		} else if (cards.get(0).getValue() == 14) {
+			// nästa drar n*4 nya int next = nextPlayer(1);
+			sendToGameState("J " + chosenColor);
+			int next = uglyNextPlayer(1);
+			
+			StringBuilder card = new StringBuilder();
+			
+			for (int i = 0; i < cards.size() * 4; i++) {
+				card.append(deck.draw().toString() + " ");
+			}
+			sendToGameState("D" + (next + 1) + " " + card.toString());
+
+			playerTurn = nextPlayer(2); 
+
+		}
 
 		// uppdatera lastPlayed och tar bort från spelarens hand
 		Card c;
@@ -158,19 +182,21 @@ public class ServerGameBoard {
 		}
 
 		// Kollar om spelaren lägger sitt sista kort (och har sagt uno)
-		if (users.get(playerTurn).getHand().isEmpty()) {
-			if (users.get(playerTurn).hasUno()) {
+		if (users.get(currentPlayer).getHand().isEmpty()) {
+			if (users.get(currentPlayer).hasUno()) {
 				// Spelaren vinner! Yay :) Meddela servern
+				sendToGameState("W " + users.get(currentPlayer).getName());
+				return;
 			} else {
 				// Spelaren la sitt sista kort men har glömt att säga uno...
 				// Spelaren får 3 kort;
-				users.get(playerTurn).addCard(deck.draw());
+				StringBuilder card = new StringBuilder();
+				for (int i = 0; i < 3; i++) {
+					card.append(deck.draw().toString() + " ");
+				}
+				sendToGameState("D" + (currentPlayer+1) + " " + card.toString());
 			}
-
 		}
-
-		// Vems tur
-		// Last Played
 
 		sendToGameState("P" + (currentPlayer + 1));
 		sendToGameState("L " + deck.getLastPlayed().toString());

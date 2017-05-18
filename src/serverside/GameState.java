@@ -44,6 +44,16 @@ public class GameState extends Thread {
 			break;
 			case ("P"):
 				mm.addToOutMailbox("P" + message.substring(1,2) + "P ");
+			break;
+			case("J"):
+				mm.addToOutMailbox("A " + message);
+			break;
+			case("K"):
+				mm.addToOutMailbox("A " + message);
+				break;
+			case("W"):
+				mm.addToOutMailbox("A " + message);
+				break;
 			default:
 				break;
 			}
@@ -53,13 +63,16 @@ public class GameState extends Thread {
 	private void getMessageAndCompute() {
 		String message = mm.fetchMessageFromInMailbox();
 		if (message != "") {
+			int playerInt;
 			switch (message.substring(3,4)){
 			case ("C"):
-				int playerInt = Integer.parseInt(message.substring(1,2));
-			mm.addToOutMailbox("A " + users.get(playerInt-1).getName() + ": " + message.substring(3));
+				playerInt = Integer.parseInt(message.substring(1,2));
+				mm.addToOutMailbox("A " + users.get(playerInt-1).getName() + ": " + message.substring(3));
 			break;
 			case ("U"):
-				mm.addToOutMailbox(message);
+				playerInt = Integer.parseInt(message.substring(1,2));
+				mm.addToOutMailbox("A U" + users.get(playerInt-1).getName());
+				serverGameBoard.setUno(playerInt-1,true);
 			break;
 			case ("N"):
 				users.add(new User(message.substring(5)));
@@ -83,6 +96,7 @@ public class GameState extends Thread {
 				}
 				if (serverGameBoard.checkCards(cards)) {
 					//Spela korten
+					
 					serverGameBoard.playCards(cards);
 				} else {
 					//Får inte spela dessa kort
@@ -96,6 +110,10 @@ public class GameState extends Thread {
 				mm.addToOutMailbox(message.substring(0,2) + "D " + card);
 				serverGameBoard.setPlayerTurn(serverGameBoard.nextPlayer(1));
 				mm.addToOutMailbox("A T " + serverGameBoard.getCurrentUser().getName());
+				break;
+			case("F"):
+				serverGameBoard.setColor(message.substring(5));
+			break;
 			default:
 				break;
 			}

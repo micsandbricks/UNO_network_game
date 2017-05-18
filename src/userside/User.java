@@ -1,4 +1,5 @@
 package userside;
+
 import java.util.LinkedList;
 
 public class User {
@@ -30,27 +31,28 @@ public class User {
 	public void removeCard(Card card) {
 		hand.remove(card);
 	}
+	public void setUno(boolean b){
+		hasUno = b;
+	}
 
 	public boolean sayUno() {
-		boolean temp = true;
-
-		for (int i = 0; i < hand.size()-1; i++) {
-			if (hand.get(i).getValue() != hand.get(i+1).getValue()) {
-				temp = false;
+		hasUno = true;
+		int value = hand.get(0).getValue();
+		for(Card c : hand){
+			if(c.getColour() == 's'){
+				hasUno = false;
+				break;
+			}
+			if( c.getValue() != value){
+				hasUno = false;
 				break;
 			}
 		}
-
-		if (hand.size() == 1 || temp) {
-			hasUno = true;
-		}
-		
 		return hasUno;
 	}
-	
+
 	public boolean hasUno() {
 		return hasUno;
 	}
-
 
 }

@@ -51,7 +51,9 @@ public class UnoGUI extends Application {
 	private FlowPane flow;
 	private String currentPlayer;
 	private TextField tfp;
+	private TextField tfc;
 	private boolean newCard = false;
+	private boolean click = false;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -65,9 +67,9 @@ public class UnoGUI extends Application {
 		this.user = (new User(name));
 
 		users.add(new User(name));
-		GameBoard gb = new GameBoard(users);
+		// GameBoard gb = new GameBoard(users);
 		// User user = gb.getUser(0);
-		gb.setupGame();
+		// gb.setupGame();
 
 		// String currentPlayer = gb.getActiveUser().getName(); //Kan endast
 		// spela om deta är "rätt"
@@ -82,13 +84,13 @@ public class UnoGUI extends Application {
 		ScrollPane scroll = new ScrollPane();
 		scroll.setLayoutX(40);
 		scroll.setLayoutY(500);
-		scroll.setPrefSize(1130, 300);
+		scroll.setPrefSize(1200, 300);
 		scroll.getStylesheets().add(UnoGUI.class.getResource("Scroll.css").toExternalForm());
 
 		this.flow = new FlowPane();
 		flow.setVgap(6);
 		flow.setHgap(2);
-		flow.setPrefWrapLength(1110); // preferred width = 300
+		flow.setPrefWrapLength(1180);
 		scroll.setContent(flow);
 
 		FlowPane colourFlow = new FlowPane();
@@ -96,7 +98,7 @@ public class UnoGUI extends Application {
 		colourFlow.setLayoutY(400);
 		colourFlow.setVgap(4);
 		colourFlow.setHgap(4);
-		colourFlow.setPrefWrapLength(110); // preferred width = 300
+		colourFlow.setPrefWrapLength(110);
 		// Create a UNO-button
 
 		/* Skapa objekt (knappar,bildf�nster och textrutor) */
@@ -106,8 +108,8 @@ public class UnoGUI extends Application {
 		ImageView unoimv = new ImageView();
 		unoimv.setImage(unopic);
 		unob.getStylesheets().add(UnoGUI.class.getResource("B_Style.css").toExternalForm());
-		unob.setLayoutX(1175);
-		unob.setLayoutY(625);
+		unob.setLayoutX(1000);
+		unob.setLayoutY(300);
 		unob.setId("uno");
 		unob.setGraphic(unoimv);
 
@@ -118,7 +120,7 @@ public class UnoGUI extends Application {
 		ImageView imvD = new ImageView();
 		imvD.setImage(imageD);
 		drawb.getStylesheets().add(UnoGUI.class.getResource("B_Style.css").toExternalForm());
-		drawb.setLayoutX(800);
+		drawb.setLayoutX(700);
 		drawb.setLayoutY(200);
 		drawb.setId("draw");
 		drawb.setGraphic(imvD);
@@ -130,23 +132,23 @@ public class UnoGUI extends Application {
 		ImageView imvP = new ImageView();
 		imvP.setImage(imageP);
 		playb.getStylesheets().add(UnoGUI.class.getResource("B_Style.css").toExternalForm());
-		playb.setLayoutX(600);
+		playb.setLayoutX(500);
 		playb.setLayoutY(200);
 		playb.setId("play");
 		playb.setGraphic(imvP);
-		
-		Image chat = new Image(getClass().getResource("/pictures/chat2.png").toExternalForm(),148,74,false,false);
+
+		Image chat = new Image(getClass().getResource("/pictures/chat2.png").toExternalForm(), 148, 74, false, false);
 		ImageView chatimv = new ImageView();
 		chatimv.setLayoutX(25);
-		chatimv.setLayoutY(20);
+		chatimv.setLayoutY(10);
 		chatimv.setImage(chat);
 
 		// Create a text-area
 		this.ta = new TextArea();
 
-		this.ta.setPrefSize(250, 300);
+		this.ta.setPrefSize(225, 350);
 		this.ta.setLayoutX(30);
-		this.ta.setLayoutY(30);
+		this.ta.setLayoutY(70);
 		this.ta.setWrapText(true);
 		ta.setId("ta");
 		ta.getStylesheets().add(UnoGUI.class.getResource("B_Style.css").toExternalForm());
@@ -155,16 +157,25 @@ public class UnoGUI extends Application {
 		this.tf = new TextField("");
 
 		this.tf.setLayoutX(30);
-		this.tf.setLayoutY(340);
-		this.tf.setPrefSize(250, 25);
+		this.tf.setLayoutY(430);
+		this.tf.setPrefSize(225, 25);
 
 		this.tfp = new TextField("");
-		this.tfp.setLayoutX(550);
+		this.tfp.setLayoutX(1000);
 		this.tfp.setLayoutY(30);
 		this.tfp.setEditable(false);
 		this.tfp.setBackground(null);
 		this.tfp.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
 		this.tfp.setPrefSize(800, 50);
+		
+		this.tfc = new TextField("HEJ");
+		this.tfc.setEditable(false);
+		this.tfc.setBackground(null);
+		this.tfc.setLayoutX(550);
+		this.tfc.setLayoutY(175);
+		this.tfc.setVisible(false);
+		this.tfc.setPrefSize(500, 30);
+		this.tfc.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 
 		// Skapa fyra knappar för val av färg
 		Button[] setColourButtons = new Button[4];
@@ -278,14 +289,18 @@ public class UnoGUI extends Application {
 		unob.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				pom.addToMailbox("U");
+				if(user.sayUno()){
+					ta.appendText("You have UNO!");
+					pom.addToMailbox("U");
+				}else{
+					ta.appendText("You don't have UNO");
+				}
 			}
 		});
 
 		drawb.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				// user.addCard(gb.getDeck().draw());
 				if (currentPlayer.equals(user.getName())) {
 					ta.appendText("draw new card \n");
 					pom.addToMailbox("G");
@@ -301,9 +316,18 @@ public class UnoGUI extends Application {
 			setColourButtons[j].setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent e) {
-					String msg = "C:" + setColourButtons[j].getId() + '\n';
-					gb.setColour(setColourButtons[j].getId().charAt(0));
+					// skicka till ServerGameBoard vilken färg som valts
+					pom.addToMailbox("F "+ setColourButtons[j].getId().charAt(0));					
+					
 					colourFlow.setVisible(false);
+					
+					ta.appendText("Yes, it is your turn to play! \n");
+					StringBuilder sb = new StringBuilder();
+					sb.append("P ");
+					for (Card c : cardsToPlay) {
+						sb.append(c.toString() + " ");
+					}
+					pom.addToMailbox(sb.toString());
 					ta.appendText(setColourButtons[j].getId());
 				}
 			});
@@ -312,128 +336,136 @@ public class UnoGUI extends Application {
 		playb.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				if (currentPlayer.equals(user.getName())) {
-					ta.appendText("Yes, it is your turn to play! \n");
+				if (cardsToPlay.isEmpty()) {
+					ta.appendText("Chose cards to play or draw a new card" + '\n');
+				} else if(cardsToPlay.get(0).getColour() == 's' && currentPlayer.equals(user.getName())) {
+					System.out.println("In UnoGUI: Har läst in svart kort");
+					colourFlow.setVisible(true);							
+				} else if(cardsToPlay.get(0).getColour() != 's' && currentPlayer.equals(user.getName())) {
+						ta.appendText("Yes, it is your turn to play! \n");
+						StringBuilder sb = new StringBuilder();
+						sb.append("P ");
+						for (Card c : cardsToPlay) {
+							sb.append(c.toString() + " ");
+						}
+						pom.addToMailbox(sb.toString());
+						
 
-					StringBuilder sb = new StringBuilder();
-					sb.append("P ");
-					for (Card c : cardsToPlay) {
-						sb.append(c.toString() + " ");
+						// // kolla att cardsToPlay inte är tom
+						// if (gb.checkCards(cardsToPlay)) {
+						// // om första kortet är svart -> välj färg och skicka
+						// // till server
+						// if (cardsToPlay.get(0).getColour() == 's') {
+						// colourFlow.setVisible(true);
+						// }
+						// gb.playCards(cardsToPlay);
+						// ta.appendText("cards played \n");
+						//
+						// ta.appendText("Last played " +
+						// gb.getDeck().getLastPlayed().toString() + "\n");
+						//
+						// // Raderar de markerade korten - de lagda korten -
+						// från
+						// flow
+						// int tb_length = tb.size();
+						// int selectedCards = 0;
+						// int removedCards = 0;
+						//
+						// for (int i = 0; i < tb.size(); i++) {
+						// if (tb.get(i).isSelected() == true) {
+						// selectedCards++;
+						// }
+						// }
+						// System.out.println("amount of selected cards: " +
+						// selectedCards);
+						//
+						// int index = 0;
+						// while (removedCards != selectedCards) {
+						// if (index < tb.size()) {
+						// if (tb.get(index).isSelected()) {
+						// System.out.println("Selected card");
+						// flow.getChildren().remove(tb.get(index));
+						// obsTb.remove(index);
+						// System.out.println("lengths are equal: " +
+						// (obsTb.size()
+						// == tb.size()));
+						// removedCards++;
+						// }
+						// index++;
+						// } else {
+						// index = 0;
+						//
+						// }
+						// }
+						//
+						// // Sätt alla togglebuttons till icke-valda
+						// for (int i = 0; i < user.getHand().size(); i++) {
+						// tb.get(i).setSelected(false);
+						// tb.get(i).setText("");
+						// }
+						//
+						// // Byt översta kortet till det senast spelade
+						// Image imageP = new Image(
+						// getClass().getResource(gb.getDeck().getLastPlayed().getImgLink()).toExternalForm(),
+						// 180,
+						// 270, true, true);
+						// ImageView imvP = new ImageView();
+						// imvP.setImage(imageP);
+						// playb.setGraphic(imvP);
+						//
+						// } else {
+						// ta.appendText("no cards chosen \n");
+						// for (int i = 0; i < user.getHand().size(); i++) {
+						// tb.get(i).setSelected(false);
+						// tb.get(i).setText("");
+						// }
+						// }
+						//
+						// while (!cardsToPlay.isEmpty()) {
+						// cardsToPlay.remove();
+						// }
+					} else {
+						ta.appendText("Please wait for your turn \n");
 					}
-					pom.addToMailbox(sb.toString());
+			}});
 
-					// // kolla att cardsToPlay inte är tom
-					// if (gb.checkCards(cardsToPlay)) {
-					// // om första kortet är svart -> välj färg och skicka
-					// // till server
-					// if (cardsToPlay.get(0).getColour() == 's') {
-					// colourFlow.setVisible(true);
-					// }
-					// gb.playCards(cardsToPlay);
-					// ta.appendText("cards played \n");
-					//
-					// ta.appendText("Last played " +
-					// gb.getDeck().getLastPlayed().toString() + "\n");
-					//
-					// // Raderar de markerade korten - de lagda korten - från
-					// flow
-					// int tb_length = tb.size();
-					// int selectedCards = 0;
-					// int removedCards = 0;
-					//
-					// for (int i = 0; i < tb.size(); i++) {
-					// if (tb.get(i).isSelected() == true) {
-					// selectedCards++;
-					// }
-					// }
-					// System.out.println("amount of selected cards: " +
-					// selectedCards);
-					//
-					// int index = 0;
-					// while (removedCards != selectedCards) {
-					// if (index < tb.size()) {
-					// if (tb.get(index).isSelected()) {
-					// System.out.println("Selected card");
-					// flow.getChildren().remove(tb.get(index));
-					// obsTb.remove(index);
-					// System.out.println("lengths are equal: " + (obsTb.size()
-					// == tb.size()));
-					// removedCards++;
-					// }
-					// index++;
-					// } else {
-					// index = 0;
-					//
-					// }
-					// }
-					//
-					// // Sätt alla togglebuttons till icke-valda
-					// for (int i = 0; i < user.getHand().size(); i++) {
-					// tb.get(i).setSelected(false);
-					// tb.get(i).setText("");
-					// }
-					//
-					// // Byt översta kortet till det senast spelade
-					// Image imageP = new Image(
-					// getClass().getResource(gb.getDeck().getLastPlayed().getImgLink()).toExternalForm(),
-					// 180,
-					// 270, true, true);
-					// ImageView imvP = new ImageView();
-					// imvP.setImage(imageP);
-					// playb.setGraphic(imvP);
-					//
-					// } else {
-					// ta.appendText("no cards chosen \n");
-					// for (int i = 0; i < user.getHand().size(); i++) {
-					// tb.get(i).setSelected(false);
-					// tb.get(i).setText("");
-					// }
-					// }
-					//
-					// while (!cardsToPlay.isEmpty()) {
-					// cardsToPlay.remove();
-					// }
-				} else {
-					ta.appendText("Please wait for your turn \n");
-				}
-			}
-		});
+	/* L�gger till children till parents */
+	for(int i = 0;i<tb.size();i++){
+		flow.getChildren().add(tb.get(i));
+	}
+	pane.getChildren().addAll(tf,ta,scroll,unob,drawb,playb,colourFlow,tfp,chatimv,tfc);
 
-		/* L�gger till children till parents */
-		for (int i = 0; i < tb.size(); i++) {
-			flow.getChildren().add(tb.get(i));
-		}
-		pane.getChildren().addAll(ta, tf, scroll, unob, drawb, playb, colourFlow, tfp,chatimv);
+	primaryStage.setScene(scene);primaryStage.setResizable(false);
 
-		primaryStage.setScene(scene);
-		primaryStage.setResizable(false);
+	Socket playerSocket = null;
+	// Try connecting to the server
+	try
+	{
+		playerSocket = new Socket("localhost", 30000);
+	}catch(
+	UnknownHostException e)
+	{
+		e.printStackTrace();
+	}catch(
+	IOException e)
+	{
+		e.printStackTrace();
+	}
 
-		Socket playerSocket = null;
-		// Try connecting to the server
-		try {
-			playerSocket = new Socket("localhost", 30000);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	// Sets up the monitors that govern writing to and reading from the
+	// server
+	this.pom=new PlayerOutputMonitor(playerSocket);this.pim=new PlayerInputMonitor(playerSocket,this);
 
-		// Sets up the monitors that govern writing to and reading from the
-		// server
-		this.pom = new PlayerOutputMonitor(playerSocket);
-		this.pim = new PlayerInputMonitor(playerSocket, this);
+	pom.addToMailbox("N "+name);
 
-		pom.addToMailbox("N " + name);
-
-		while (!runGame) {
-			System.out.println(runGame);
-		}
+	while(!runGame)
+	{
 		System.out.println(runGame);
-		primaryStage.show();
+	}System.out.println(runGame);primaryStage.show();
 
 	}
-	
-	private void removeCards(){
+
+	private void removeCards() {
 		// Raderar de markerade korten - de lagda korten - från flow
 
 		int selectedCards = 0;
@@ -444,8 +476,7 @@ public class UnoGUI extends Application {
 				selectedCards++;
 			}
 		}
-		System.out.println("amount of selected cards: " +
-				selectedCards);
+		System.out.println("amount of selected cards: " + selectedCards);
 
 		int index = 0;
 		while (removedCards != selectedCards) {
@@ -454,8 +485,7 @@ public class UnoGUI extends Application {
 					System.out.println("Selected card");
 					flow.getChildren().remove(tb.get(index));
 					obsTb.remove(index);
-					System.out.println("lengths are equal: " + (obsTb.size()
-							== tb.size()));
+					System.out.println("lengths are equal: " + (obsTb.size() == tb.size()));
 					removedCards++;
 				}
 				index++;
@@ -464,11 +494,11 @@ public class UnoGUI extends Application {
 
 			}
 		}
-		
-		for(Card c : cardsToPlay){
+
+		for (Card c : cardsToPlay) {
 			user.removeCard(c);
 		}
-		
+
 		while (!cardsToPlay.isEmpty()) {
 			cardsToPlay.remove();
 		}
@@ -531,13 +561,13 @@ public class UnoGUI extends Application {
 		case ("L"):
 			Platform.runLater(() -> {
 				try {
-			lastPlayed = new Card(message.substring(2));
-			System.out.println("Last played: " + lastPlayed.toString());
-			Image imageP = new Image(getClass().getResource(lastPlayed.getImgLink()).toExternalForm(), 180, 270, true,
-					true);
-			ImageView imvP = new ImageView();
-			imvP.setImage(imageP);
-			this.playb.setGraphic(imvP);
+					lastPlayed = new Card(message.substring(2));
+					System.out.println("Last played: " + lastPlayed.toString());
+					Image imageP = new Image(getClass().getResource(lastPlayed.getImgLink()).toExternalForm(), 180, 270,
+							true, true);
+					ImageView imvP = new ImageView();
+					imvP.setImage(imageP);
+					this.playb.setGraphic(imvP);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -566,6 +596,31 @@ public class UnoGUI extends Application {
 					e.printStackTrace();
 				}
 			});
+			break;
+		case ("J"):
+			Platform.runLater(() -> {
+				try {
+					System.out.println("Chosen Color: " + message.substring(2));
+					tfc.setVisible(true);
+					tfc.setText(message.substring(2));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+			break;
+		case ("K"):
+			Platform.runLater(() -> {
+				try {
+					tfc.setVisible(false);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+			break;
+		case("W"):
+			
+		break;
 		default:
 			break;
 		}
