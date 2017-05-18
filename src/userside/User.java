@@ -28,8 +28,14 @@ public class User {
 		}
 	}
 
-	public void removeCard(Card card) {
-		hand.remove(card);
+	public boolean removeCard(Card card) {
+		for(Card c: hand){
+			if(c.getColour() == card.getColour() && c.getValue() == card.getValue()){
+				return hand.remove(c);
+			}
+		}
+		return false;
+		
 	}
 	public void setUno(boolean b){
 		hasUno = b;

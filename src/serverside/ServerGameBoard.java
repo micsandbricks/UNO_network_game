@@ -52,7 +52,7 @@ public class ServerGameBoard {
 			sb.get(i).append("D" + (i + 1) + " ");
 		}
 		// Delar ut 7 kort till spelarna
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < users.size(); j++) {
 				card = deck.draw();
 				users.get(j).addCard(card);
@@ -177,8 +177,9 @@ public class ServerGameBoard {
 		Card c;
 		while (!cards.isEmpty()) {
 			c = cards.remove();
-			users.get(playerTurn).removeCard(c);
+			System.out.println("The card wa removed: " + users.get(currentPlayer).removeCard(c));
 			deck.play(c);
+			System.out.println(users.get(currentPlayer).getName() + " " + users.get(currentPlayer).getHand().size());
 		}
 
 		// Kollar om spelaren lägger sitt sista kort (och har sagt uno)

@@ -589,6 +589,16 @@ public class UnoGUI extends Application {
 			System.out.println("New card added to " + this.user.getName() + ": " + message.substring(2));
 			break;
 		case ("P"):
+			if(message.substring(1,2).equals("F")){
+				Platform.runLater(() -> {
+					try {
+						ta.appendText("You can't play those cards");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
+				break;
+			}
 			Platform.runLater(() -> {
 				try {
 					removeCards();
@@ -619,7 +629,11 @@ public class UnoGUI extends Application {
 			});
 			break;
 		case("W"):
-			
+			if(message.substring(2).equals(user.getName())){
+				JOptionPane.showMessageDialog(null, "You won!","GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+			}else{
+				JOptionPane.showMessageDialog(null, message.substring(2) +" won!", "GAME OVER",JOptionPane.INFORMATION_MESSAGE);
+			}
 		break;
 		default:
 			break;

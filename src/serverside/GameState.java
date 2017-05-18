@@ -87,6 +87,7 @@ public class GameState extends Thread {
 			}
 				break;
 			case ("P"):
+				playerInt = Integer.parseInt(message.substring(1,2));
 				System.out.println(message);
 				String[] stringCards = message.substring(5).split(" ");
 				LinkedList<Card> cards = new LinkedList<Card>();
@@ -100,7 +101,7 @@ public class GameState extends Thread {
 					serverGameBoard.playCards(cards);
 				} else {
 					//Får inte spela dessa kort
-					mm.addToOutMailbox("");
+					mm.addToOutMailbox("P" + playerInt + "PF");
 				}
 				
 				System.out.println("check cards = " + serverGameBoard.checkCards(cards));
