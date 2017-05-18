@@ -52,7 +52,7 @@ public class ServerGameBoard {
 			sb.get(i).append("D" + (i + 1) + " ");
 		}
 		// Delar ut 7 kort till spelarna
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < users.size(); j++) {
 				card = deck.draw();
 				users.get(j).addCard(card);
@@ -104,7 +104,6 @@ public class ServerGameBoard {
 
 		// Svart kort är lagt -> Endast vald färg får läggas.
 		if (deck.getLastPlayed().getColour() == 's') {
-			char temp = cards.get(0).getColour();
 			if (cards.get(0).getColour() == chosenColor) {
 				return true;
 			} else {
@@ -124,7 +123,7 @@ public class ServerGameBoard {
 
 	public void playCards(LinkedList<Card> cards) {
 		int currentPlayer = playerTurn;
-
+		Card temp;
 		if (cards.get(0).getValue() < 10) {
 			// Gör färgtextruta osynlig
 			sendToGameState("K");
@@ -140,9 +139,11 @@ public class ServerGameBoard {
 			int next = uglyNextPlayer(1);
 			StringBuilder card = new StringBuilder();
 			for (int i = 0; i < cards.size() * 2; i++) {
-				card.append(deck.draw().toString() + " ");
+				temp = deck.draw();
+				card.append(temp.toString() + " ");
+				users.get(next).addCard(temp);;
 			}
-			sendToGameState("D" + (next + 1) + " " + card.toString());
+			sendToGameState("D" + (next+1) + " " + card.toString());
 
 			playerTurn = nextPlayer(2);
 
@@ -161,23 +162,22 @@ public class ServerGameBoard {
 			// nästa drar n*4 nya int next = nextPlayer(1);
 			sendToGameState("J " + chosenColor);
 			int next = uglyNextPlayer(1);
-			
 			StringBuilder card = new StringBuilder();
-			
 			for (int i = 0; i < cards.size() * 4; i++) {
-				card.append(deck.draw().toString() + " ");
+				temp = deck.draw();
+				card.append(temp.toString() + " ");
+				users.get(next).addCard(temp);
 			}
-			sendToGameState("D" + (next + 1) + " " + card.toString());
+			sendToGameState("D" + (next+1) + " " + card.toString());
 
 			playerTurn = nextPlayer(2); 
-
 		}
 
 		// uppdatera lastPlayed och tar bort från spelarens hand
 		Card c;
 		while (!cards.isEmpty()) {
 			c = cards.remove();
-			System.out.println("The card wa removed: " + users.get(currentPlayer).removeCard(c));
+			System.out.println(" The card was removed: " + c.getColour()+c.getValue()+ users.get(currentPlayer).removeCard(c));
 			deck.play(c);
 			System.out.println(users.get(currentPlayer).getName() + " " + users.get(currentPlayer).getHand().size());
 		}
@@ -228,7 +228,7 @@ public class ServerGameBoard {
 
 	public int uglyNextPlayer(int i) {
 		int temp = playerTurn;
-
+		
 		for (int j = 0; j < i; j++) {
 			if (clockwise) {
 				temp++;

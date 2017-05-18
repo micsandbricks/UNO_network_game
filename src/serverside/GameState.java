@@ -67,7 +67,7 @@ public class GameState extends Thread {
 			switch (message.substring(3,4)){
 			case ("C"):
 				playerInt = Integer.parseInt(message.substring(1,2));
-				mm.addToOutMailbox("A " + users.get(playerInt-1).getName() + ": " + message.substring(3));
+				mm.addToOutMailbox("A C " + users.get(playerInt-1).getName() + ": " + message.substring(4));
 			break;
 			case ("U"):
 				playerInt = Integer.parseInt(message.substring(1,2));
@@ -107,7 +107,9 @@ public class GameState extends Thread {
 				System.out.println("check cards = " + serverGameBoard.checkCards(cards));
 				break;
 			case ("G"):
-				String card = serverGameBoard.getDeck().draw().toString();
+				Card temp = serverGameBoard.getDeck().draw();
+				String card = temp.toString();
+				serverGameBoard.users.get(serverGameBoard.playerTurn).addCard(temp);
 				mm.addToOutMailbox(message.substring(0,2) + "D " + card);
 				serverGameBoard.setPlayerTurn(serverGameBoard.nextPlayer(1));
 				mm.addToOutMailbox("A T " + serverGameBoard.getCurrentUser().getName());

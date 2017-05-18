@@ -349,81 +349,6 @@ public class UnoGUI extends Application {
 							sb.append(c.toString() + " ");
 						}
 						pom.addToMailbox(sb.toString());
-						
-
-						// // kolla att cardsToPlay inte är tom
-						// if (gb.checkCards(cardsToPlay)) {
-						// // om första kortet är svart -> välj färg och skicka
-						// // till server
-						// if (cardsToPlay.get(0).getColour() == 's') {
-						// colourFlow.setVisible(true);
-						// }
-						// gb.playCards(cardsToPlay);
-						// ta.appendText("cards played \n");
-						//
-						// ta.appendText("Last played " +
-						// gb.getDeck().getLastPlayed().toString() + "\n");
-						//
-						// // Raderar de markerade korten - de lagda korten -
-						// från
-						// flow
-						// int tb_length = tb.size();
-						// int selectedCards = 0;
-						// int removedCards = 0;
-						//
-						// for (int i = 0; i < tb.size(); i++) {
-						// if (tb.get(i).isSelected() == true) {
-						// selectedCards++;
-						// }
-						// }
-						// System.out.println("amount of selected cards: " +
-						// selectedCards);
-						//
-						// int index = 0;
-						// while (removedCards != selectedCards) {
-						// if (index < tb.size()) {
-						// if (tb.get(index).isSelected()) {
-						// System.out.println("Selected card");
-						// flow.getChildren().remove(tb.get(index));
-						// obsTb.remove(index);
-						// System.out.println("lengths are equal: " +
-						// (obsTb.size()
-						// == tb.size()));
-						// removedCards++;
-						// }
-						// index++;
-						// } else {
-						// index = 0;
-						//
-						// }
-						// }
-						//
-						// // Sätt alla togglebuttons till icke-valda
-						// for (int i = 0; i < user.getHand().size(); i++) {
-						// tb.get(i).setSelected(false);
-						// tb.get(i).setText("");
-						// }
-						//
-						// // Byt översta kortet till det senast spelade
-						// Image imageP = new Image(
-						// getClass().getResource(gb.getDeck().getLastPlayed().getImgLink()).toExternalForm(),
-						// 180,
-						// 270, true, true);
-						// ImageView imvP = new ImageView();
-						// imvP.setImage(imageP);
-						// playb.setGraphic(imvP);
-						//
-						// } else {
-						// ta.appendText("no cards chosen \n");
-						// for (int i = 0; i < user.getHand().size(); i++) {
-						// tb.get(i).setSelected(false);
-						// tb.get(i).setText("");
-						// }
-						// }
-						//
-						// while (!cardsToPlay.isEmpty()) {
-						// cardsToPlay.remove();
-						// }
 					} else {
 						ta.appendText("Please wait for your turn \n");
 					}
@@ -542,6 +467,9 @@ public class UnoGUI extends Application {
 		case ("R"):
 			runGame = true;
 			break;
+		case("C"):
+			ta.appendText(message.substring(2) +'\n');
+		break;
 		case ("T"):
 			Platform.runLater(() -> {
 				try {
