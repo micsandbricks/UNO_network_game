@@ -1,17 +1,17 @@
 #r{
-	-fx-background-color:red
+	-fx-background-color:#ff5555;
 }
 
 #b{
-	-fx-background-color:blue
+	-fx-background-color:#5555ff;
 }
 
 #y{
-	-fx-background-color:yellow
+	-fx-background-color:#ffbb55;
 }
 
 #g{
-	-fx-background-color:green
+	-fx-background-color:#7be172;
 }
 
 #play{
@@ -25,7 +25,18 @@
 #uno{
 	-fx-background-color: transparent;
 }
+#ta {
+	-fx-font: 18px Arial;
+	}
+
+#ta .content{
+	-fx-background-image: url("/pictures/texta.png");
+}
 
 .button:pressed{
 	-fx-effect: innershadow(gaussian,grey,3,7,0,0);
+}
+.button:hover{
+	-fx-scale-x: 1.05;
+	-fx-scale-y: 1.05;
 }

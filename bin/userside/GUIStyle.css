@@ -1,7 +1,7 @@
 /* Style of the "background" */
 .root{
-	-fx-background-image: url("/pictures/backg.jpg");
-	-fx-background-size: cover;
+	-fx-background-image: url("/pictures/backg3.png");
+	-fx-background-size: stretch;
 }
 
 /* Style for the circles  */

@@ -83,6 +83,7 @@ public class UnoGUI extends Application {
 		scroll.setLayoutX(40);
 		scroll.setLayoutY(500);
 		scroll.setPrefSize(1130, 300);
+		scroll.getStylesheets().add(UnoGUI.class.getResource("Scroll.css").toExternalForm());
 
 		this.flow = new FlowPane();
 		flow.setVgap(6);
@@ -101,7 +102,7 @@ public class UnoGUI extends Application {
 		/* Skapa objekt (knappar,bildf�nster och textrutor) */
 		this.unob = new Button();
 
-		Image unopic = new Image(getClass().getResource("/pictures/unob.png").toExternalForm(), 179, 97, true, true);
+		Image unopic = new Image(getClass().getResource("/pictures/suno.png").toExternalForm(), 179, 97, true, true);
 		ImageView unoimv = new ImageView();
 		unoimv.setImage(unopic);
 		unob.getStylesheets().add(UnoGUI.class.getResource("B_Style.css").toExternalForm());
@@ -133,6 +134,12 @@ public class UnoGUI extends Application {
 		playb.setLayoutY(200);
 		playb.setId("play");
 		playb.setGraphic(imvP);
+		
+		Image chat = new Image(getClass().getResource("/pictures/chat2.png").toExternalForm(),148,74,false,false);
+		ImageView chatimv = new ImageView();
+		chatimv.setLayoutX(25);
+		chatimv.setLayoutY(20);
+		chatimv.setImage(chat);
 
 		// Create a text-area
 		this.ta = new TextArea();
@@ -141,6 +148,8 @@ public class UnoGUI extends Application {
 		this.ta.setLayoutX(30);
 		this.ta.setLayoutY(30);
 		this.ta.setWrapText(true);
+		ta.setId("ta");
+		ta.getStylesheets().add(UnoGUI.class.getResource("B_Style.css").toExternalForm());
 		this.ta.setEditable(false);
 
 		this.tf = new TextField("");
@@ -394,7 +403,7 @@ public class UnoGUI extends Application {
 		for (int i = 0; i < tb.size(); i++) {
 			flow.getChildren().add(tb.get(i));
 		}
-		pane.getChildren().addAll(ta, tf, scroll, unob, drawb, playb, colourFlow, tfp);
+		pane.getChildren().addAll(ta, tf, scroll, unob, drawb, playb, colourFlow, tfp,chatimv);
 
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);

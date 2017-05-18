@@ -7,3 +7,7 @@
 	/* Presentera valt kort */
 	-fx-effect: innershadow(gaussian,limegreen,3,7,0,0);
 }
+.toggle-button:hover{
+	-fx-scale-x: 1.05;
+	-fx-scale-y: 1.05;
+}
