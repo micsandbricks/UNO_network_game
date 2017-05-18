@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Uno Let's play!</title>
+<title>Uno - Let's play!</title>
+<meta charset="utf-8">
 <style>
 div.container {
     width: 100%;
@@ -17,6 +18,9 @@ header, footer {
     text-align: center;
 }
 
+aside {
+    float: right
+}
 nav {
     float: left;
     max-width: 160px;
@@ -34,10 +38,12 @@ nav ul a {
 }
 
 article {
+    margin-right: 200px;
     margin-left: 170px;
     border-left: 1px solid gray;
     padding: 1em;
     overflow: hidden;
+    text-align: left
 }
 </style>
 </head>
@@ -60,21 +66,40 @@ article {
   </ul>
 </nav>
 
+<aside>
+<img src="r10.png" alt="stoppkort"> Här ska det komma en bild på spelbrädet!
+</aside>
+
 <article>
   <h1>Spela uno!</h1>
   <p>Så här gör du för att hämta och köra igång spelet:</p>
   <ol>
-     <li>Ladda ner detta: <a href="#"> Länk till Uno</a></li>
+     <li>Ladda ner detta: <a href="#"> The Game</a></li>
      <li>Starta rätt sak</li>
      <li>Hitta vänner</li>
      <li>Starta server och välj antal spelare</li>
      <li>Starta varsin klient</li>
      <li>Klå alla dina vänner i uno</li>
      <li>Upprepa från punkt 3...</li>
-  <ol>
+  </ol>
 
-   <h1>Regler</h1>
-   <p>Så här gör man:</p>
+  <h2>Regler</h2>
+  <p>När spelet startar har alla spelare sju kort var på handen (raden uppvända kort i nederkanten av skärmen). Det  finns också ett uppvänt kort och en upp-och-nedvänd hög med kort.</p>
+
+  <p>En spelare kan lägga kort av samma färg eller valör som det redan lagda, uppvända, kortet. Även flera kort från handen kan läggas samtidigt, om de har samma valör. Har korten annan valör än det senast lagda måste det understa, först lagda, kortet från handen ha samma färg som det senast lagda (det uppvända kortet i mitten på skärmen).</p>
+
+  <p>I varje färg finns det kort med siffrorna 0-9 samt ett antal specialkort, se bilderna nedan. Dessa är stoppkort, som hoppar över en spelare (eller flera, om fler kort läggs samtidigt), vändkort, som byter håll så många gånger som kort läggs och +2-kort som ger nästa spelare två kort (så många gånger som antalet kort som läggs samtigt) och hoppar sedan över den spelarens tur.</p>
+
+<img src="r10.png" alt="stoppkort">  <img src="r11.png" alt="dra två">  <img src="r12.png" alt="vändkort">
+
+  <p>Det finns även två sorters kort med svart baksida, se bilderna nedan. Dessa kan alltid läggas. Det ena låter den spelaren som la kortet välja färg, för att sedan låta turen passera vidare. Det andra är ett +4-kort. Spelaren får välja färg och nästa spelare får fyra kort för att därefter stå över sin tur.</p>
+<img src="s13.png" alt="byr färg">  <img src="s14.png" alt="dra fyra">
+
+  <p>Kan en spelare inte lägga får denne ta upp ett kort. klicka på högen med upp-och-nedvända kort. Ett nytt kort läggs till i handen och turen går vidare.</p>
+
+  <p>När en spelare endast har ett kort kvar, eller kan lägga alla sina kort samtidigt (det vill säga om alla korten har samma valör) skall denne säga Uno (genom att trycka på texten "say UNO"). Om spelaren sedan lägger sina sista kort har denne vunnit. Får spelaren upp nya kort händer inget särskilt, men kom ihåg att säga uno även nsäta gång du bara har ett kort kvar på handen!</p>
+
+   <p>Lägger en spelare sitt sista kort utan att ha sagt uno får spelaren tre kort på handen och turen går vidare. Spelet fortsätter som vanligt.</p>
 </article>
 
 <footer>Ha en bra dag :)</footer>
