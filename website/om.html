@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Uno - om projektet</title>
+<meta charset="utf-8">
+<style>
+div.container {
+    width: 100%;
+    border: 1px solid gray;
+    background: url("backg-t.png");
+}
+
+header, footer {
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+}
+
+nav {
+    float: left;
+    max-width: 160px;
+    margin: 0;
+    padding: 1em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+   
+nav ul a {
+    text-decoration: none;
+}
+
+article {
+    margin-left: 170px;
+    border-left: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+}
+</style>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+</head>
+
+<body>
+<div class="container">
+
+<a href="index.html" style="text-decoration: none">
+<header>
+   <h1>Uno - ett programmeringsprojekt</h1>
+</header>
+</a>
+  
+<nav>
+  <ul>
+<li>
+<a class="github-button" href="https://github.com/micsandbricks/UNO_network_game" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a>
+</li>
+    <li><a href="#">Om projektet</a></li>
+    <li><a href="spelet.html">Let's play!</a></li>
+    <li><a href="hur.html">Hur?</a></li>
+    <li><a href="lardomar.html">Lärdomar</a></li>
+  </ul>
+</nav>
+
+<aside>
+<img src="flowchart.png" alt="spelbrade" width=800px style="float:right; padding:50px;"> 
+</aside>
+
+<article>
+  <h1>Om projektet</h1>
+  <p>Här ska det skrivas saker om projektet och resultatet·</p>
+  <h4>Kravspecifikation</h4>
+  <ul>
+    <li>Minst två spelare ska kunna spela kortspelet UNO mot varandra</li>
+    <li>Möjlighet för en spelare att säga ”UNO” när den endast har ett kort kvar på hand</li>
+    <li>Spelet sker över ett nätverk</li>
+    <li>Kommunikation sker via en TCP server</li>
+    <li>Möjlighet för spelare att kommunicera med varandra via chatt</li>
+  </ul>
+  <h4>Utökad kravspecifikation</h4>
+  <p>Sådant vi ämnade implementera om tid och möjlighet fanns.</p>
+  <ul>
+    <li>Möjlighet för spelare att välja användarnamn</li>
+    <li>Spara statistik över vinster och förluster</li>
+    <li>Möjlighet att spela med poängräkning </li>
+    <li>Matchmaking - systemet skapar matcher mellan spelare som har samma ranking</li>
+  </ul>
+  <p>Alla punkter i kravspecifikationen uppfylldes. Av punkterna i den utökade kravspecifikationen implementerades endast den första, möjlighet att välja användarnamn. Dock lagras ingen information mellan olika spelomgångar. Därför kan ingen statistik föras. Kan också nämnas att vi har valt att implementera vårat Uno med någoy enklare regler än orginalreglerna. Ingen poängräkning sker i slutet. Överlag har de reglerna gruppmedlemmerna spelat med som barn gått föra det eventuellt mer officiella reglerna. Speltekniskt är dock skillnaderna relativt små.</p>
+
+  <p>Som en del av projektet har det också skrivits en rapport. Där projektet i sin helhet också beskrivs. Denna rapport kan laddas ner <a href="rapport.pdf">här</a>.
+</article>
+
+
+
+<footer>EDA095 - Nätverksprogrammering VT17
+Josefine Axelsson, Mikaela Giegold, Elisabeth Persson, Martin Sundeqvist</footer>
+
+</div>
+</body>
+</html>

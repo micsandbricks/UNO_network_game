@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Uno - hur?</title>
+<meta charset="utf-8">
+<style>
+div.container {
+    width: 100%;
+    border: 1px solid gray;
+    background: url("backg-t.png");
+}
+
+header, footer {
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+}
+
+nav {
+    float: left;
+    max-width: 160px;
+    margin: 0;
+    padding: 1em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+   
+nav ul a {
+    text-decoration: none;
+}
+
+article {
+    margin-left: 170px;
+    border-left: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+}
+</style>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+</head>
+
+<body>
+<div class="container">
+
+<a href="index.html" style="text-decoration: none">
+<header>
+   <h1>Uno - ett programmeringsprojekt</h1>
+</header>
+</a>
+  
+<nav>
+  <ul>
+<li>
+<a class="github-button" href="https://github.com/micsandbricks/UNO_network_game" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a>
+</li>
+    <li><a href="om.html">Om projektet</a></li>
+    <li><a href="spelet.html">Let's play!</a></li>
+    <li><a href="#">Hur?</a></li>
+    <li><a href="lardomar.html">Lärdomar</a></li>
+  </ul>
+</nav>
+
+<article>
+  <h1>Hur?</h1>
+  <p>UNO-spelet är byggt i Java med standardbibliotek (ex. java.io) för läsande mellan server och spelarklienter. JavaFX-ramverket är använt för de grafiska elementen i spelarnas GUI. Ett antal trådar används för att skriva till och läsa från spelarna och en klass på servern sköter all spelarlogik. Lokalt hos spelaren finns även vissa kontrollmekanismer för att se till att felaktiga kommandon ej skickas till servern.</p>
+  <p>Spelarklienterna låter användaren välja ett lämpligt namn och kör sedan igång det grafiska användargränssnittet. Det består i princip av ett textfält och en textruta för chattkommunikation, en knapp för att säga uno och ett antal kort. Dessa kort är egentligen också knappar men representerar korten spelaren har på handen, högen med kort att dra från.</p>
+  <p>När spelaren lägger eller drar upp kort samt skriver i chatten skickas meddelanden till servern som textsträngar med information om vad som händer. Detta tas emot och behandlas på serversidan som skickar meddelandet vidare till berörda spelare och/eller den klass som styr själva spelbordet. Information skickas tillbaka till klienterna smo uppdaterar gränssnittet och låter turen gå vidare till nästa spelare.</p>
+  <p>Kommunikationen sker via TCP</p>
+</article>
+
+<footer>EDA095 - Nätverksprogrammering VT17
+Josefine Axelsson, Mikaela Giegold, Elisabeth Persson, Martin Sundeqvist</footer>
+
+</div>
+
+</body>
+
+</html>

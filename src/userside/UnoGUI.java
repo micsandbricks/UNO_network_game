@@ -194,23 +194,7 @@ public class UnoGUI extends Application {
 
 		/* Creates the ObsList */
 		this.obsTb = FXCollections.observableList(tb);
-		// obsTb.addListener(new ListChangeListener<Object>() {
-		// @Override
-		// public void onChanged(javafx.collections.ListChangeListener.Change<?
-		// extends Object> change) {
-		// int index;
-		// while (change.next()) {
-		// if (change.wasAdded()) {
-		// index = obsTb.size() - 1;
-		// final int i = index;
-		// System.out.println("added a card");
-		// } else {
-		// // händer annars
-		// System.out.println("card was removed?");
-		// }
-		// }
-		// }
-		// });
+		
 		/* Creates all eventhandlers */
 		/* Creates a new togglebutton for each card in the hand */
 		for (int i = 0; i < user.getHand().size(); i++) {
