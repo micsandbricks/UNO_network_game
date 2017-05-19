@@ -64,16 +64,10 @@ public class UnoGUI extends Application {
 		// Ask for the user name
 		String name = (String) JOptionPane.showInputDialog(null, "What is your name?", JOptionPane.PLAIN_MESSAGE);
 
-		// Lägg till själva användaren
+		// Adds the user
 		this.user = (new User(name));
 
 		users.add(new User(name));
-		// GameBoard gb = new GameBoard(users);
-		// User user = gb.getUser(0);
-		// gb.setupGame();
-
-		// String currentPlayer = gb.getActiveUser().getName(); //Kan endast
-		// spela om deta är "rätt"
 
 		primaryStage.setTitle("UNO game");
 
@@ -100,9 +94,8 @@ public class UnoGUI extends Application {
 		colourFlow.setVgap(4);
 		colourFlow.setHgap(4);
 		colourFlow.setPrefWrapLength(110);
-		// Create a UNO-button
 
-		/* Skapa objekt (knappar,bildf�nster och textrutor) */
+		/* Creates objects, buttons, windows etc. */
 		this.unob = new Button();
 
 		Image unopic = new Image(getClass().getResource("/pictures/suno.png").toExternalForm(), 179, 97, true, true);
@@ -144,7 +137,6 @@ public class UnoGUI extends Application {
 		chatimv.setLayoutY(10);
 		chatimv.setImage(chat);
 
-		// Create a text-area
 		this.ta = new TextArea();
 
 		this.ta.setPrefSize(225, 350);
@@ -168,7 +160,7 @@ public class UnoGUI extends Application {
 		this.tfp.setBackground(null);
 		this.tfp.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
 		this.tfp.setPrefSize(800, 50);
-		
+
 		this.tfc = new TextField("HEJ");
 		this.tfc.setEditable(false);
 		this.tfc.setBackground(null);
@@ -178,13 +170,12 @@ public class UnoGUI extends Application {
 		this.tfc.setPrefSize(500, 30);
 		this.tfc.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 
-		// Skapa fyra knappar för val av färg
+		/* Creates 4 colored buttons. Displays when the black card is played */
 		Button[] setColourButtons = new Button[4];
 		for (int i = 0; i < setColourButtons.length; i++) {
 			setColourButtons[i] = new Button();
 			setColourButtons[i].getStylesheets().add(UnoGUI.class.getResource("B_Style.css").toExternalForm());
 			setColourButtons[i].setPrefSize(50, 50);
-			// setColourButtons[i].setVisible(false);
 		}
 
 		setColourButtons[0].setId("r");
@@ -197,30 +188,31 @@ public class UnoGUI extends Application {
 		}
 		colourFlow.setVisible(false);
 
-		// För att visa korten på hand:
+		/* Displays the hand */
 		this.tb = new LinkedList<ToggleButton>();
 		this.cardsToPlay = new LinkedList<Card>();
 
-		// Skapa en obslist som h�ller koll p� f�r�ndringar i listan
+		/* Creates the ObsList */
 		this.obsTb = FXCollections.observableList(tb);
-		obsTb.addListener(new ListChangeListener<Object>() {
-			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends Object> change) {
-				int index;
-				while (change.next()) {
-					if (change.wasAdded()) {
-						index = obsTb.size() - 1;
-						final int i = index;
-						System.out.println("added a card");
-					} else {
-						// händer annars
-						System.out.println("card was removed?");
-					}
-				}
-			}
-		});
-
-		// Skapar en ny
+		// obsTb.addListener(new ListChangeListener<Object>() {
+		// @Override
+		// public void onChanged(javafx.collections.ListChangeListener.Change<?
+		// extends Object> change) {
+		// int index;
+		// while (change.next()) {
+		// if (change.wasAdded()) {
+		// index = obsTb.size() - 1;
+		// final int i = index;
+		// System.out.println("added a card");
+		// } else {
+		// // händer annars
+		// System.out.println("card was removed?");
+		// }
+		// }
+		// }
+		// });
+		/* Creates all eventhandlers */
+		/* Creates a new togglebutton for each card in the hand */
 		for (int i = 0; i < user.getHand().size(); i++) {
 			ToggleButton newTb = new ToggleButton();
 			obsTb.add(newTb);
@@ -249,20 +241,7 @@ public class UnoGUI extends Application {
 			tb.getLast().getStylesheets().add(UnoGUI.class.getResource("ToggleB_Hand.css").toExternalForm());
 		}
 
-		/* Event f�r objekt */
-
-		// Skriver ut meddelandet fr�n textfield i textarea n�r Enter trycks
-		// ner, inget h�nder om textfield �r tomt
-		// tf.setOnKeyPressed(new EventHandler<KeyEvent>() {
-		// @Override
-		// public void handle(KeyEvent event) {
-		// if (event.getCode() == KeyCode.ENTER && !tf.getText().equals("")) {
-		// ta.appendText(user.getName() + ": " + tf.getText() + '\n');
-		// tf.setText("");
-		// }
-		// }
-		// });
-
+		/* Chatevent send message */
 		tf.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -274,31 +253,20 @@ public class UnoGUI extends Application {
 			}
 		});
 
-		// unob.setOnAction(new EventHandler<ActionEvent>() {
-		// @Override
-		// public void handle(ActionEvent e) {
-		// if (user.sayUno()) {
-		// // Meddela övriga spelare att den här spelare har uno
-		// ta.appendText("You said UNO! \n");
-		// } else {
-		// ta.appendText("You do not have UNO! \n");
-		// }
-		//
-		// }
-		// });
-
+		/* Unoevent to say UNO! */
 		unob.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				if(user.sayUno()){
+				if (user.sayUno()) {
 					ta.appendText("You have UNO!");
 					pom.addToMailbox("U");
-				}else{
+				} else {
 					ta.appendText("You don't have UNO");
 				}
 			}
 		});
 
+		/* Drawevent to pull card from the deck */
 		drawb.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -312,16 +280,17 @@ public class UnoGUI extends Application {
 			}
 		});
 
+		/* Colorevent for the black cards */
 		for (int i = 0; i < setColourButtons.length; i++) {
 			final int j = i;
 			setColourButtons[j].setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent e) {
-					// skicka till ServerGameBoard vilken färg som valts
-					pom.addToMailbox("F "+ setColourButtons[j].getId().charAt(0));					
-					
+					// Send chosen color to ServerGameBoard */
+					pom.addToMailbox("F " + setColourButtons[j].getId().charAt(0));
+
 					colourFlow.setVisible(false);
-					
+
 					ta.appendText("Yes, it is your turn to play! \n");
 					StringBuilder sb = new StringBuilder();
 					sb.append("P ");
@@ -334,78 +303,77 @@ public class UnoGUI extends Application {
 			});
 		}
 
+		/* Playevent to play card(s) */
 		playb.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				if (cardsToPlay.isEmpty()) {
 					ta.appendText("Chose cards to play or draw a new card" + '\n');
-				} else if(cardsToPlay.get(0).getColour() == 's' && currentPlayer.equals(user.getName())) {
+				} else if (cardsToPlay.get(0).getColour() == 's' && currentPlayer.equals(user.getName())) {
 					System.out.println("In UnoGUI: Har läst in svart kort");
-					colourFlow.setVisible(true);							
-				} else if(cardsToPlay.get(0).getColour() != 's' && currentPlayer.equals(user.getName())) {
-						ta.appendText("Yes, it is your turn to play! \n");
-						StringBuilder sb = new StringBuilder();
-						sb.append("P ");
-						for (Card c : cardsToPlay) {
-							sb.append(c.toString() + " ");
-						}
-						pom.addToMailbox(sb.toString());
-					} else {
-						ta.appendText("Please wait for your turn \n");
+					colourFlow.setVisible(true);
+				} else if (cardsToPlay.get(0).getColour() != 's' && currentPlayer.equals(user.getName())) {
+					ta.appendText("Yes, it is your turn to play! \n");
+					StringBuilder sb = new StringBuilder();
+					sb.append("P ");
+					for (Card c : cardsToPlay) {
+						sb.append(c.toString() + " ");
 					}
-			}});
+					pom.addToMailbox(sb.toString());
+				} else {
+					ta.appendText("Please wait for your turn \n");
+				}
+			}
+		});
 
-	/* L�gger till children till parents */
-	for(int i = 0;i<tb.size();i++){
-		flow.getChildren().add(tb.get(i));
-	}
-	pane.getChildren().addAll(tf,ta,scroll,unob,drawb,playb,colourFlow,tfp,chatimv,tfc);
-
-	primaryStage.setScene(scene);primaryStage.setResizable(false);
-
-	Socket playerSocket = null;
-	// Try connecting to the server
-	try
-	{
-		JTextField host = new JTextField();
-		JTextField port = new JTextField();
-		Object[] message = {
-		    "Machine:", host,
-		    "Port:", port
-		};
-
-		int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
-		if (option == JOptionPane.OK_OPTION) {
-			playerSocket = new Socket(host.getText(),Integer.parseInt(port.getText()));
-		}else{
-			
+		/* Adds children to parents */
+		for (int i = 0; i < tb.size(); i++) {
+			flow.getChildren().add(tb.get(i));
 		}
-	}catch(
-	UnknownHostException e)
-	{
-		e.printStackTrace();
-	}catch(
-	IOException e)
-	{
-		e.printStackTrace();
-	}
+		pane.getChildren().addAll(tf, ta, scroll, unob, drawb, playb, colourFlow, tfp, chatimv, tfc);
 
-	// Sets up the monitors that govern writing to and reading from the
-	// server
-	this.pom=new PlayerOutputMonitor(playerSocket);this.pim=new PlayerInputMonitor(playerSocket,this);
+		primaryStage.setScene(scene);
+		primaryStage.setResizable(false);
 
-	pom.addToMailbox("N "+name);
+		Socket playerSocket = null;
+		// Try connecting to the server
+		try {
 
-	while(!runGame)
-	{
+			JTextField host = new JTextField();
+			JTextField port = new JTextField();
+			Object[] message = { "Machine:", host, "Port:", port };
+
+			int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				playerSocket = new Socket(host.getText(), Integer.parseInt(port.getText()));
+			} else {
+
+			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		/*
+		 * Sets up the monitors that govern writing to and reading from the
+		 * server
+		 */
+		this.pom = new PlayerOutputMonitor(playerSocket);
+		this.pim = new PlayerInputMonitor(playerSocket, this);
+
+		pom.addToMailbox("N " + name);
+
+		while (!runGame) {
+			System.out.println(runGame);
+		}
 		System.out.println(runGame);
-	}System.out.println(runGame);primaryStage.show();
+		primaryStage.show();
 
 	}
 
+	/* Remove selected cards from flow */
 	private void removeCards() {
-		// Raderar de markerade korten - de lagda korten - från flow
-
 		int selectedCards = 0;
 		int removedCards = 0;
 
@@ -414,16 +382,13 @@ public class UnoGUI extends Application {
 				selectedCards++;
 			}
 		}
-		System.out.println("amount of selected cards: " + selectedCards);
 
 		int index = 0;
 		while (removedCards != selectedCards) {
 			if (index < tb.size()) {
 				if (tb.get(index).isSelected()) {
-					System.out.println("Selected card");
 					flow.getChildren().remove(tb.get(index));
 					obsTb.remove(index);
-					System.out.println("lengths are equal: " + (obsTb.size() == tb.size()));
 					removedCards++;
 				}
 				index++;
@@ -442,8 +407,8 @@ public class UnoGUI extends Application {
 		}
 	}
 
+	/* Adds a togglebutton and an event for the pulled card */
 	private void drawCard() {
-		// Lägger till ny knapp när nytt kort dras
 		ToggleButton newTb = new ToggleButton();
 		obsTb.add(newTb);
 		newTb.setOnAction(a -> {
@@ -454,7 +419,6 @@ public class UnoGUI extends Application {
 						+ " is selected \n");
 				tb.get(x).setText(Integer.toString(cardsToPlay.size()));
 			} else {
-				System.out.println(tb.size() + " " + x);
 				cardsToPlay.remove(user.getHand().get(x));
 				ta.appendText(user.getHand().get(x).toString() + " is deselected \n");
 				tb.get(x).setText("");
@@ -473,16 +437,20 @@ public class UnoGUI extends Application {
 		this.flow.getChildren().add(tb.getLast());
 	};
 
+	/* Updates the GUI based on the message from the server. */
 	public void update() {
 		String message = pim.readFromMailbox();
 		System.out.println("In unogui update: " + message);
 		switch (message.substring(0, 1)) {
+		/* Run the game */
 		case ("R"):
 			runGame = true;
 			break;
-		case("C"):
-			ta.appendText(message.substring(2) +'\n');
-		break;
+		/* Display chatmessage */
+		case ("C"):
+			ta.appendText(message.substring(2) + '\n');
+			break;
+		/* Display playerturn */
 		case ("T"):
 			Platform.runLater(() -> {
 				try {
@@ -499,6 +467,7 @@ public class UnoGUI extends Application {
 			});
 
 			break;
+		/* Update last played card */
 		case ("L"):
 			Platform.runLater(() -> {
 				try {
@@ -514,6 +483,7 @@ public class UnoGUI extends Application {
 				}
 			});
 			break;
+		/* Draw cards */
 		case ("D"):
 			String[] cardsIn = message.substring(2).split(" ");
 			Platform.runLater(() -> {
@@ -527,10 +497,11 @@ public class UnoGUI extends Application {
 					e.printStackTrace();
 				}
 			});
-			System.out.println("New card added to " + this.user.getName() + ": " + message.substring(2));
 			break;
+		/* Response from server when player play cards. */
 		case ("P"):
-			if(message.substring(1,2).equals("F")){
+			/* If unvalid */
+			if (message.substring(1, 2).equals("F")) {
 				Platform.runLater(() -> {
 					try {
 						ta.appendText("You can't play those cards");
@@ -540,6 +511,7 @@ public class UnoGUI extends Application {
 				});
 				break;
 			}
+			/* If valid. Removes from hand. */
 			Platform.runLater(() -> {
 				try {
 					removeCards();
@@ -548,10 +520,10 @@ public class UnoGUI extends Application {
 				}
 			});
 			break;
+		/* Display the chosen color when a black card is played. */
 		case ("J"):
 			Platform.runLater(() -> {
 				try {
-					System.out.println("Chosen Color: " + message.substring(2));
 					tfc.setVisible(true);
 					tfc.setText(message.substring(2));
 
@@ -560,6 +532,7 @@ public class UnoGUI extends Application {
 				}
 			});
 			break;
+		/* Removes the colored textfield above the played card. */
 		case ("K"):
 			Platform.runLater(() -> {
 				try {
@@ -569,13 +542,15 @@ public class UnoGUI extends Application {
 				}
 			});
 			break;
-		case("W"):
-			if(message.substring(2).equals(user.getName())){
-				JOptionPane.showMessageDialog(null, "You won!","GAME OVER", JOptionPane.INFORMATION_MESSAGE);
-			}else{
-				JOptionPane.showMessageDialog(null, message.substring(2) +" won!", "GAME OVER",JOptionPane.INFORMATION_MESSAGE);
+		/* Notifies the winner and losers. */
+		case ("W"):
+			if (message.substring(2).equals(user.getName())) {
+				JOptionPane.showMessageDialog(null, "You won!", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(null, message.substring(2) + " won!", "GAME OVER",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
-		break;
+			break;
 		default:
 			break;
 		}

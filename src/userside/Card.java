@@ -12,7 +12,6 @@ public class Card {
 	public Card(String str){
 		this.colour = str.charAt(0);
 		this.value = Integer.parseInt(str.substring(1, 3));
-		
 	}
 
 	public char getColour() {

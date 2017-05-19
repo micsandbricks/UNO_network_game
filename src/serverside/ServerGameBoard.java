@@ -36,13 +36,16 @@ public class ServerGameBoard {
 		char c = color.charAt(0);
 		chosenColor = c;
 	}
-	public void setUno(int i, boolean b){
+
+	public void setUno(int i, boolean b) {
 		users.get(i).setUno(b);
 	}
-	public boolean hasUno(int i){
+
+	public boolean hasUno(int i) {
 		return users.get(i).hasUno();
 	}
 
+	/* Setup the game and hand out 7 cards. */
 	public void setupGame() {
 		deck = new Deck();
 		Card card;
@@ -51,7 +54,6 @@ public class ServerGameBoard {
 			sb.add(new StringBuilder());
 			sb.get(i).append("D" + (i + 1) + " ");
 		}
-		// Delar ut 7 kort till spelarna
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < users.size(); j++) {
 				card = deck.draw();
@@ -61,48 +63,49 @@ public class ServerGameBoard {
 		}
 
 		deck.play(deck.draw());
+		/* Set a "start card", must be a number. */
 		while (deck.getLastPlayed().getValue() > 9) {
 			deck.play(deck.draw());
 		}
 
 		clockwise = true;
-
+		/* Set a random player to start. */
 		Random rand = new Random();
 		playerTurn = rand.nextInt(users.size());
-		System.out.println("user size: " + users.size());
-		System.out.println("playerturn: " + playerTurn);
 		sendToGameState("L " + deck.getLastPlayed().toString());
-		System.out.println("In sgb, last played: " + deck.getLastPlayed().toString());
 		sendToGameState("T " + users.get(playerTurn).getName());
-		System.out.println("in ServerGameBoard, playerTurn: " + users.get(playerTurn).getName());
+		/* Send the cards to each player. */
 		for (int i = 0; i < sb.size(); i++) {
 			sendToGameState(sb.get(i).toString());
-			System.out.println("I ServerGameBoard, kort delas ut: " + sb.get(i).toString());
 		}
+
 	}
 
+	/* Send the message to gamestate. */
 	private void sendToGameState(String message) {
 		gamestate.addtoInfo(message);
 	}
 
-	// Kontrollera att korten får läggas
+	/* Check if the cards are valid. */
 	public boolean checkCards(LinkedList<Card> cards) {
 		if (cards.isEmpty()) {
 			return false;
 		}
-		// Alla siffror är samma
+		/* All numbers are equal. */
 		for (int i = 0; i < cards.size() - 1; i++) {
 			if (cards.get(i).getValue() != cards.get(i + 1).getValue()) {
 				return false;
 			}
 		}
 
-		// Första kortet är svart -> Kan alltid läggas
+		/* First card is black -> always ok */
 		if (cards.get(0).getColour() == 's') {
 			return true;
 		}
 
-		// Svart kort är lagt -> Endast vald färg får läggas.
+		/*
+		 * Black card is the last played -> only the chosen color is ok to play.
+		 */
 		if (deck.getLastPlayed().getColour() == 's') {
 			if (cards.get(0).getColour() == chosenColor) {
 				return true;
@@ -111,8 +114,10 @@ public class ServerGameBoard {
 			}
 		}
 
-		// Första siffran eller första färgen är fel (men inte svart, redan
-		// tittat på ovan)
+		/*
+		 * Last played value or color is invalid (but not a black card, it is
+		 * already checked(above).
+		 */
 		if (cards.get(0).getColour() != deck.getLastPlayed().getColour()
 				&& cards.get(0).getValue() != deck.getLastPlayed().getValue()) {
 			return false;
@@ -121,45 +126,49 @@ public class ServerGameBoard {
 		return true;
 	}
 
+	/* Play the selected cards. */
 	public void playCards(LinkedList<Card> cards) {
 		int currentPlayer = playerTurn;
 		Card temp;
+		/* Cards is played and the turn is passed on. */
 		if (cards.get(0).getValue() < 10) {
-			// Gör färgtextruta osynlig
+			/* Makes the color textfield invisible. */
 			sendToGameState("K");
-			// (korten läggs och) turen går vidare
 			playerTurn = nextPlayer(1);
 
-		} else if (cards.get(0).getValue() == 10) { // hoppa över spelare
+		} else if (cards.get(0).getValue() == 10) { // skip a player
 			sendToGameState("K");
 			playerTurn = nextPlayer(cards.size() + 1);
 
-		} else if (cards.get(0).getValue() == 11) { // nästa drar n*2 kort
+		} else if (cards.get(0).getValue() == 11) { // next player draws n*2
+													// cards and skip this
+													// player
 			sendToGameState("K");
 			int next = uglyNextPlayer(1);
 			StringBuilder card = new StringBuilder();
 			for (int i = 0; i < cards.size() * 2; i++) {
 				temp = deck.draw();
 				card.append(temp.toString() + " ");
-				users.get(next).addCard(temp);;
+				users.get(next).addCard(temp);
 			}
-			sendToGameState("D" + (next+1) + " " + card.toString());
+			sendToGameState("D" + (next + 1) + " " + card.toString());
 
 			playerTurn = nextPlayer(2);
 
-		} else if (cards.get(0).getValue() == 12) { // byt håll
+		} else if (cards.get(0).getValue() == 12) { // change direction
 			sendToGameState("K");
 			if (cards.size() % 2 == 1) {
 				clockwise = !clockwise;
 			}
 			playerTurn = nextPlayer(1);
 
-		} else if (cards.get(0).getValue() == 13) {
+		} else if (cards.get(0).getValue() == 13) { // change color
 			sendToGameState("J " + chosenColor);
 			playerTurn = nextPlayer(1);
-		
-		} else if (cards.get(0).getValue() == 14) {
-			// nästa drar n*4 nya int next = nextPlayer(1);
+
+		} else if (cards.get(0).getValue() == 14) { // next player draws n*4
+													// cards and skip this
+													// player
 			sendToGameState("J " + chosenColor);
 			int next = uglyNextPlayer(1);
 			StringBuilder card = new StringBuilder();
@@ -168,43 +177,44 @@ public class ServerGameBoard {
 				card.append(temp.toString() + " ");
 				users.get(next).addCard(temp);
 			}
-			sendToGameState("D" + (next+1) + " " + card.toString());
+			sendToGameState("D" + (next + 1) + " " + card.toString());
 
-			playerTurn = nextPlayer(2); 
+			playerTurn = nextPlayer(2);
 		}
 
-		// uppdatera lastPlayed och tar bort från spelarens hand
+		/* Update lastplayed and remove from the playerhand. */
 		Card c;
 		while (!cards.isEmpty()) {
 			c = cards.remove();
-			System.out.println(" The card was removed: " + c.getColour()+c.getValue()+ users.get(currentPlayer).removeCard(c));
 			deck.play(c);
-			System.out.println(users.get(currentPlayer).getName() + " " + users.get(currentPlayer).getHand().size());
 		}
 
-		// Kollar om spelaren lägger sitt sista kort (och har sagt uno)
+		/* Check if the player plays the last card (and have said Uno). */
 		if (users.get(currentPlayer).getHand().isEmpty()) {
 			if (users.get(currentPlayer).hasUno()) {
-				// Spelaren vinner! Yay :) Meddela servern
+				/* The currentplayer wins */
 				sendToGameState("W " + users.get(currentPlayer).getName());
 				return;
 			} else {
-				// Spelaren la sitt sista kort men har glömt att säga uno...
-				// Spelaren får 3 kort;
+				/*
+				 * Current player played the last card, but forgot to say Uno..
+				 * The player gets 3 cards.
+				 */
 				StringBuilder card = new StringBuilder();
 				for (int i = 0; i < 3; i++) {
 					card.append(deck.draw().toString() + " ");
 				}
-				sendToGameState("D" + (currentPlayer+1) + " " + card.toString());
+				sendToGameState("D" + (currentPlayer + 1) + " " + card.toString());
 			}
 		}
-
+		/* Send player command, last played card, and the player turn. */
 		sendToGameState("P" + (currentPlayer + 1));
 		sendToGameState("L " + deck.getLastPlayed().toString());
 		sendToGameState("T " + users.get(playerTurn).getName());
 
 	}
 
+	/* Returns the next player, "i" represent the number of players to skip. */
 	public int nextPlayer(int i) {
 		int temp = playerTurn;
 
@@ -228,7 +238,7 @@ public class ServerGameBoard {
 
 	public int uglyNextPlayer(int i) {
 		int temp = playerTurn;
-		
+
 		for (int j = 0; j < i; j++) {
 			if (clockwise) {
 				temp++;

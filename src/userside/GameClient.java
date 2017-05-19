@@ -11,7 +11,7 @@ public class GameClient {
 
 	public static void main(String args[]) {
 
-		// Sets up the b
+		/* Starts GUI */
 		try {
 			Application.launch(UnoGUI.class, args);
 		} catch (Exception e) {
