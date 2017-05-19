@@ -7,7 +7,7 @@
 div.container {
     width: 100%;
     border: 1px solid gray;
-    background: url("backg-t.jpg");
+    background: url("backg-t.png");
 }
 
 header, footer {
@@ -19,7 +19,9 @@ header, footer {
 }
 
 aside {
-    float: right
+    float: right;
+    padding: 50px;
+    
 }
 nav {
     float: left;
@@ -46,6 +48,8 @@ article {
     text-align: left
 }
 </style>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
 </head>
 
 <body>
@@ -59,6 +63,9 @@ article {
   
 <nav>
   <ul>
+<li>
+<a class="github-button" href="https://github.com/micsandbricks/UNO_network_game" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a>
+</li>
     <li><a href="om.html">Om projektet</a></li>
     <li><a href="#">Let's play!</a></li>
     <li><a href="hur.html">Hur?</a></li>
@@ -67,7 +74,7 @@ article {
 </nav>
 
 <aside>
-<img src="r10.png" alt="stoppkort"> Här ska det komma en bild på spelbrädet!
+<img src="screen1.png" alt="spelbrade" width=800px style="float:right;"> 
 </aside>
 
 <article>
@@ -76,13 +83,11 @@ article {
   <p>Så här gör du för att hämta och köra igång spelet:</p>
   <h4>För att hämta spelet</h4>
   <ol>
-     <li>Ladda ner detta: <a href="#"> The Game</a></li>
-     <li>Starta rätt sak</li>
-     <li>Hitta vänner</li>
-     <li>Starta server och välj antal spelare</li>
-     <li>Starta varsin klient</li>
-     <li>Klå alla dina vänner i uno</li>
-     <li>Upprepa från punkt 3...</li>
+     <li>Forka oss på github:<a class="github-button" href="https://github.com/micsandbricks/UNO_network_game" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a> </a></li>
+     <li>Hitta vänner / spelsugna fiender.</li>
+     <li>Kör klassen UnoMain för att starta upp servern. Låt därefter alla spelare som vill vara med köra GameClient.</li>
+     <li>Spela Uno tills du stupar.</li>
+     <li>Spread the good word.</li>
   </ol>
 
   <h4>Regler</h4>
@@ -105,7 +110,7 @@ article {
 </article>
 
 <footer>EDA095 - Nätverksprogrammering VT17
-Josefin Axelsson, Mikaela Giegold, Elisabeth Persson, Martin Sundeqvist</footer>
+Josefine Axelsson, Mikaela Giegold, Elisabeth Persson, Martin Sundeqvist</footer>
 
 </div>
 

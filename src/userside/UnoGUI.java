@@ -64,11 +64,6 @@ public class UnoGUI extends Application {
 		// Lägg till själva användaren
 		this.user = (new User(name));
 
-		users.add(new User(name));
-		GameBoard gb = new GameBoard(users);
-		// User user = gb.getUser(0);
-		gb.setupGame();
-
 		// String currentPlayer = gb.getActiveUser().getName(); //Kan endast
 		// spela om deta är "rätt"
 
