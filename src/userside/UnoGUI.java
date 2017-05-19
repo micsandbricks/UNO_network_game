@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import userside.PlayerInputMonitor;
 import userside.PlayerOutputMonitor;
@@ -366,7 +367,19 @@ public class UnoGUI extends Application {
 	// Try connecting to the server
 	try
 	{
-		playerSocket = new Socket("localhost", 30000);
+		JTextField host = new JTextField();
+		JTextField port = new JTextField();
+		Object[] message = {
+		    "Machine:", host,
+		    "Port:", port
+		};
+
+		int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+		if (option == JOptionPane.OK_OPTION) {
+			playerSocket = new Socket(host.getText(),Integer.parseInt(port.getText()));
+		}else{
+			
+		}
 	}catch(
 	UnknownHostException e)
 	{
